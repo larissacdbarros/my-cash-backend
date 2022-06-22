@@ -34,7 +34,6 @@ D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\MyCash.API.runtimeconfig.json
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\MyCash.API.runtimeconfig.dev.json
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\MyCash.API.dll
-D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\ref\MyCash.API.dll
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\MyCash.API.pdb
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\Humanizer.dll
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\Microsoft.Data.SqlClient.dll
@@ -80,7 +79,6 @@ D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\MyCash.API.MvcApplicationPartsAssemblyInfo.cs
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\MyCash.API.MvcApplicationPartsAssemblyInfo.cache
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\staticwebassets\MyCash.API.StaticWebAssets.Manifest.cache
-D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\staticwebassets\MyCash.API.StaticWebAssets.xml
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\scopedcss\bundle\MyCash.API.styles.css
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\MyCash.API.RazorTargetAssemblyInfo.cache
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\MyCash.API.csproj.CopyComplete
@@ -88,3 +86,5 @@ D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\ref\MyCash.API.dll
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\MyCash.API.pdb
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\MyCash.API.genruntimeconfig.cache
+D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\refint\MyCash.API.dll
+D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\MyCash.API.StaticWebAssets.xml
