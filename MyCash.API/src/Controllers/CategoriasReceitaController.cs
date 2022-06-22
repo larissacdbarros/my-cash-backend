@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
+using src.Data;
 
 namespace src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CategoriasReceitaController
+    public class CategoriasReceitaController : ControllerBase
     {
+        private readonly DataContext _context;
         [HttpGet]
          public string GetAll(){
             return "Teste";

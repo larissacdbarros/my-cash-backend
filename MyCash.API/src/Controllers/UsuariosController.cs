@@ -1,7 +1,5 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using src.Models;
+using src.Data;
 
 namespace MyCash.API.Controllers
 {
@@ -9,6 +7,8 @@ namespace MyCash.API.Controllers
     [Route("api/[controller]")]
     public class UsuariosController : ControllerBase
     {
+        private readonly DataContext _context;
+
         [HttpGet]
          public string GetAll(){
             return "Teste";
