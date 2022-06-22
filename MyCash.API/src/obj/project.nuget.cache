@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vf1eAUMX55t0j9ba2462FBo6OSSKYA7vLEMz+gMGEcMn+eF8/FqRWdL7RqawKnpHYSIKhhcy6r7qKeFYBUF59Q==",
+  "dgSpecHash": "yjieYVzSgdYnFKymwlRhTUtuXg6VDZhtL0+T1PRvlzsMjzhHRSXEkKmD3Dx2oTrm1w/uM14kgzvQXS5sD9J+pA==",
   "success": true,
-  "projectFilePath": "d:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj",
+  "projectFilePath": "D:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Larissa\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Larissa\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",

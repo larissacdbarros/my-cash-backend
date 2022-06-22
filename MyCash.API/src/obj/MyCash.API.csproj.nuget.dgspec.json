@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj": {}
+    "D:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj": {}
   },
   "projects": {
-    "d:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj": {
+    "D:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj",
+        "projectUniqueName": "D:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj",
         "projectName": "MyCash.API",
-        "projectPath": "d:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj",
+        "projectPath": "D:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\MyCash.API.csproj",
         "packagesPath": "C:\\Users\\Larissa\\.nuget\\packages\\",
-        "outputPath": "d:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\obj\\",
+        "outputPath": "D:\\Documents\\Cast\\Turma de formação .Net\\PROJETO FINAL\\Back\\MyCash.API\\src\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Larissa\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -21,6 +21,7 @@
           "net5.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -54,6 +55,8 @@
               "version": "[5.0.17, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
               "version": "[5.0.17, )"
             },
