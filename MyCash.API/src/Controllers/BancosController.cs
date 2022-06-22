@@ -1,13 +1,10 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using src.Models;
 
-namespace MyCash.API.Controllers
+namespace src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsuariosController : ControllerBase
+    public class BancosController
     {
         [HttpGet]
          public string GetAll(){
