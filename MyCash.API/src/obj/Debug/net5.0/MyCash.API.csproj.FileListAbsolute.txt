@@ -88,3 +88,4 @@ D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\MyCash.API.genruntimeconfig.cache
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\refint\MyCash.API.dll
 D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\bin\Debug\net5.0\MyCash.API.StaticWebAssets.xml
+D:\Documents\Cast\Turma de formação .Net\PROJETO FINAL\Back\MyCash.API\src\obj\Debug\net5.0\staticwebassets\MyCash.API.StaticWebAssets.xml
