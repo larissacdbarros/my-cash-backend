@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyCash.API.Data.Migrations
 {
-    public partial class iinit : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -50,6 +50,34 @@ namespace MyCash.API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CategoriasDespesas",
+                columns: table => new
+                {
+                    CategoriaDespesaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Icone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoriasDespesas", x => x.CategoriaDespesaId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CategoriasReceitas",
+                columns: table => new
+                {
+                    CategoriaReceitaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Icone = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CategoriasReceitas", x => x.CategoriaReceitaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Objetivos",
                 columns: table => new
                 {
@@ -65,34 +93,6 @@ namespace MyCash.API.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Objetivos", x => x.ObjetivoId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubcategoriasDespesas",
-                columns: table => new
-                {
-                    SubcategoriaDespesaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Icone = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubcategoriasDespesas", x => x.SubcategoriaDespesaId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SubcategoriasReceitas",
-                columns: table => new
-                {
-                    SubcategoriaReceitaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Icone = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SubcategoriasReceitas", x => x.SubcategoriaReceitaId);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,65 +112,65 @@ namespace MyCash.API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartoesCredito",
+                name: "Metas",
                 columns: table => new
                 {
-                    CartaoCreditoId = table.Column<int>(type: "int", nullable: false)
+                    MetaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BandeiraCartaoId = table.Column<int>(type: "int", nullable: false),
-                    LimiteCartao = table.Column<double>(type: "float", nullable: false)
+                    CategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
+                    LimiteParaGastar = table.Column<double>(type: "float", nullable: false),
+                    PercentualGasto = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartoesCredito", x => x.CartaoCreditoId);
+                    table.PrimaryKey("PK_Metas", x => x.MetaId);
                     table.ForeignKey(
-                        name: "FK_CartoesCredito_BandeirasCartoes_BandeiraCartaoId",
-                        column: x => x.BandeiraCartaoId,
-                        principalTable: "BandeirasCartoes",
-                        principalColumn: "BandeiraCartaoId",
+                        name: "FK_Metas_CategoriasDespesas_CategoriaDespesaId",
+                        column: x => x.CategoriaDespesaId,
+                        principalTable: "CategoriasDespesas",
+                        principalColumn: "CategoriaDespesaId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoriasDespesas",
+                name: "SubcategoriasDespesas",
                 columns: table => new
                 {
-                    CategoriaDespesaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Icone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubcategoriaDespesaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Icone = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CategoriaDespesaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoriasDespesas", x => x.CategoriaDespesaId);
+                    table.PrimaryKey("PK_SubcategoriasDespesas", x => x.SubcategoriaDespesaId);
                     table.ForeignKey(
-                        name: "FK_CategoriasDespesas_SubcategoriasDespesas_SubcategoriaDespesaId",
-                        column: x => x.SubcategoriaDespesaId,
-                        principalTable: "SubcategoriasDespesas",
-                        principalColumn: "SubcategoriaDespesaId",
+                        name: "FK_SubcategoriasDespesas_CategoriasDespesas_CategoriaDespesaId",
+                        column: x => x.CategoriaDespesaId,
+                        principalTable: "CategoriasDespesas",
+                        principalColumn: "CategoriaDespesaId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "CategoriasReceitas",
+                name: "SubcategoriasReceitas",
                 columns: table => new
                 {
-                    CategoriaReceitaId = table.Column<int>(type: "int", nullable: false)
+                    SubcategoriaReceitaId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Tipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Icone = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SubcategoriaReceitaId = table.Column<int>(type: "int", nullable: false)
+                    CategoriaReceitaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CategoriasReceitas", x => x.CategoriaReceitaId);
+                    table.PrimaryKey("PK_SubcategoriasReceitas", x => x.SubcategoriaReceitaId);
                     table.ForeignKey(
-                        name: "FK_CategoriasReceitas_SubcategoriasReceitas_SubcategoriaReceitaId",
-                        column: x => x.SubcategoriaReceitaId,
-                        principalTable: "SubcategoriasReceitas",
-                        principalColumn: "SubcategoriaReceitaId",
+                        name: "FK_SubcategoriasReceitas_CategoriasReceitas_CategoriaReceitaId",
+                        column: x => x.CategoriaReceitaId,
+                        principalTable: "CategoriasReceitas",
+                        principalColumn: "CategoriaReceitaId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -210,6 +210,124 @@ namespace MyCash.API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CartoesCredito",
+                columns: table => new
+                {
+                    CartaoCreditoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BandeiraCartaoId = table.Column<int>(type: "int", nullable: false),
+                    LimiteCartao = table.Column<double>(type: "float", nullable: false),
+                    ContaId = table.Column<int>(type: "int", nullable: false),
+                    UsuarioId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CartoesCredito", x => x.CartaoCreditoId);
+                    table.ForeignKey(
+                        name: "FK_CartoesCredito_BandeirasCartoes_BandeiraCartaoId",
+                        column: x => x.BandeiraCartaoId,
+                        principalTable: "BandeirasCartoes",
+                        principalColumn: "BandeiraCartaoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartoesCredito_Contas_ContaId",
+                        column: x => x.ContaId,
+                        principalTable: "Contas",
+                        principalColumn: "ContaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartoesCredito_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "UsuarioId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DespesasConta",
+                columns: table => new
+                {
+                    DespesaContaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubcategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
+                    ContaId = table.Column<int>(type: "int", nullable: false),
+                    Valor = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DespesasConta", x => x.DespesaContaId);
+                    table.ForeignKey(
+                        name: "FK_DespesasConta_Contas_ContaId",
+                        column: x => x.ContaId,
+                        principalTable: "Contas",
+                        principalColumn: "ContaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DespesasConta_SubcategoriasDespesas_SubcategoriaDespesaId",
+                        column: x => x.SubcategoriaDespesaId,
+                        principalTable: "SubcategoriasDespesas",
+                        principalColumn: "SubcategoriaDespesaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Receitas",
+                columns: table => new
+                {
+                    ReceitaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubcategoriaReceitaId = table.Column<int>(type: "int", nullable: false),
+                    ContaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Receitas", x => x.ReceitaId);
+                    table.ForeignKey(
+                        name: "FK_Receitas_Contas_ContaId",
+                        column: x => x.ContaId,
+                        principalTable: "Contas",
+                        principalColumn: "ContaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Receitas_SubcategoriasReceitas_SubcategoriaReceitaId",
+                        column: x => x.SubcategoriaReceitaId,
+                        principalTable: "SubcategoriasReceitas",
+                        principalColumn: "SubcategoriaReceitaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DespesasCartao",
+                columns: table => new
+                {
+                    DespesaCartaoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CartaoCreditoId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SubcategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
+                    Valor = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DespesasCartao", x => x.DespesaCartaoId);
+                    table.ForeignKey(
+                        name: "FK_DespesasCartao_CartoesCredito_CartaoCreditoId",
+                        column: x => x.CartaoCreditoId,
+                        principalTable: "CartoesCredito",
+                        principalColumn: "CartaoCreditoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_DespesasCartao_SubcategoriasDespesas_SubcategoriaDespesaId",
+                        column: x => x.SubcategoriaDespesaId,
+                        principalTable: "SubcategoriasDespesas",
+                        principalColumn: "SubcategoriaDespesaId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Faturas",
                 columns: table => new
                 {
@@ -234,110 +352,20 @@ namespace MyCash.API.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Metas",
-                columns: table => new
-                {
-                    MetaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
-                    LimiteParaGastar = table.Column<double>(type: "float", nullable: false),
-                    PercentualGasto = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Metas", x => x.MetaId);
-                    table.ForeignKey(
-                        name: "FK_Metas_CategoriasDespesas_CategoriaDespesaId",
-                        column: x => x.CategoriaDespesaId,
-                        principalTable: "CategoriasDespesas",
-                        principalColumn: "CategoriaDespesaId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Receitas",
-                columns: table => new
-                {
-                    ReceitaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoriaReceitaId = table.Column<int>(type: "int", nullable: false),
-                    ContaId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Receitas", x => x.ReceitaId);
-                    table.ForeignKey(
-                        name: "FK_Receitas_CategoriasReceitas_CategoriaReceitaId",
-                        column: x => x.CategoriaReceitaId,
-                        principalTable: "CategoriasReceitas",
-                        principalColumn: "CategoriaReceitaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Receitas_Contas_ContaId",
-                        column: x => x.ContaId,
-                        principalTable: "Contas",
-                        principalColumn: "ContaId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Despesas",
-                columns: table => new
-                {
-                    DespesaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IsDespesaCartaoCredito = table.Column<bool>(type: "bit", nullable: false),
-                    CartaoCreditoId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
-                    ContaId = table.Column<int>(type: "int", nullable: false),
-                    FaturaId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Despesas", x => x.DespesaId);
-                    table.ForeignKey(
-                        name: "FK_Despesas_CartoesCredito_CartaoCreditoId",
-                        column: x => x.CartaoCreditoId,
-                        principalTable: "CartoesCredito",
-                        principalColumn: "CartaoCreditoId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Despesas_CategoriasDespesas_CategoriaDespesaId",
-                        column: x => x.CategoriaDespesaId,
-                        principalTable: "CategoriasDespesas",
-                        principalColumn: "CategoriaDespesaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Despesas_Contas_ContaId",
-                        column: x => x.ContaId,
-                        principalTable: "Contas",
-                        principalColumn: "ContaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Despesas_Faturas_FaturaId",
-                        column: x => x.FaturaId,
-                        principalTable: "Faturas",
-                        principalColumn: "FaturaId",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_CartoesCredito_BandeiraCartaoId",
                 table: "CartoesCredito",
                 column: "BandeiraCartaoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoriasDespesas_SubcategoriaDespesaId",
-                table: "CategoriasDespesas",
-                column: "SubcategoriaDespesaId");
+                name: "IX_CartoesCredito_ContaId",
+                table: "CartoesCredito",
+                column: "ContaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CategoriasReceitas_SubcategoriaReceitaId",
-                table: "CategoriasReceitas",
-                column: "SubcategoriaReceitaId");
+                name: "IX_CartoesCredito_UsuarioId",
+                table: "CartoesCredito",
+                column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contas_BancoId",
@@ -355,24 +383,24 @@ namespace MyCash.API.Data.Migrations
                 column: "UsuarioId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Despesas_CartaoCreditoId",
-                table: "Despesas",
+                name: "IX_DespesasCartao_CartaoCreditoId",
+                table: "DespesasCartao",
                 column: "CartaoCreditoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Despesas_CategoriaDespesaId",
-                table: "Despesas",
-                column: "CategoriaDespesaId");
+                name: "IX_DespesasCartao_SubcategoriaDespesaId",
+                table: "DespesasCartao",
+                column: "SubcategoriaDespesaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Despesas_ContaId",
-                table: "Despesas",
+                name: "IX_DespesasConta_ContaId",
+                table: "DespesasConta",
                 column: "ContaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Despesas_FaturaId",
-                table: "Despesas",
-                column: "FaturaId");
+                name: "IX_DespesasConta_SubcategoriaDespesaId",
+                table: "DespesasConta",
+                column: "SubcategoriaDespesaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Faturas_CartaoCreditoId",
@@ -385,20 +413,36 @@ namespace MyCash.API.Data.Migrations
                 column: "CategoriaDespesaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Receitas_CategoriaReceitaId",
-                table: "Receitas",
-                column: "CategoriaReceitaId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Receitas_ContaId",
                 table: "Receitas",
                 column: "ContaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Receitas_SubcategoriaReceitaId",
+                table: "Receitas",
+                column: "SubcategoriaReceitaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubcategoriasDespesas_CategoriaDespesaId",
+                table: "SubcategoriasDespesas",
+                column: "CategoriaDespesaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubcategoriasReceitas_CategoriaReceitaId",
+                table: "SubcategoriasReceitas",
+                column: "CategoriaReceitaId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Despesas");
+                name: "DespesasCartao");
+
+            migrationBuilder.DropTable(
+                name: "DespesasConta");
+
+            migrationBuilder.DropTable(
+                name: "Faturas");
 
             migrationBuilder.DropTable(
                 name: "Metas");
@@ -410,25 +454,25 @@ namespace MyCash.API.Data.Migrations
                 name: "Receitas");
 
             migrationBuilder.DropTable(
-                name: "Faturas");
-
-            migrationBuilder.DropTable(
-                name: "CategoriasDespesas");
-
-            migrationBuilder.DropTable(
-                name: "CategoriasReceitas");
-
-            migrationBuilder.DropTable(
-                name: "Contas");
+                name: "SubcategoriasDespesas");
 
             migrationBuilder.DropTable(
                 name: "CartoesCredito");
 
             migrationBuilder.DropTable(
-                name: "SubcategoriasDespesas");
+                name: "SubcategoriasReceitas");
 
             migrationBuilder.DropTable(
-                name: "SubcategoriasReceitas");
+                name: "CategoriasDespesas");
+
+            migrationBuilder.DropTable(
+                name: "BandeirasCartoes");
+
+            migrationBuilder.DropTable(
+                name: "Contas");
+
+            migrationBuilder.DropTable(
+                name: "CategoriasReceitas");
 
             migrationBuilder.DropTable(
                 name: "Bancos");
@@ -438,9 +482,6 @@ namespace MyCash.API.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Usuarios");
-
-            migrationBuilder.DropTable(
-                name: "BandeirasCartoes");
         }
     }
 }

@@ -60,7 +60,7 @@ namespace src.Controllers
             await _context.Receitas.AddAsync(body);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(body);
         }
 
         [HttpDelete("{id}")]

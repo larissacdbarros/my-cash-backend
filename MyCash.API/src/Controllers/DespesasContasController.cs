@@ -9,24 +9,24 @@ namespace src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DespesasController : ControllerBase
+    public class DespesasContaController : ControllerBase
     {
         private readonly DataContext _context;
-       public DespesasController(DataContext context)
+       public DespesasContaController(DataContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Despesa>>> GetAll()
+        public async Task<ActionResult<IEnumerable<DespesaConta>>> GetAll()
         {
-            return await _context.Despesas.ToListAsync();
+            return await _context.DespesasConta.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Despesa>> GetById(int id)
+        public async Task<ActionResult<DespesaConta>> GetById(int id)
         {
-            Despesa result = await _context.Despesas.FindAsync(id);
+            DespesaConta result = await _context.DespesasConta.FindAsync(id);
 
             if (result == null)
             {
@@ -36,37 +36,37 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Despesa body)
+        public async Task<IActionResult> Update(int id, DespesaConta body)
         {
-            Despesa result = await _context.Despesas.FindAsync(id);
+            DespesaConta result = await _context.DespesasConta.FindAsync(id);
             if(result == null){
                 return NotFound();
             }
 
-            body.DespesaId = id ;
+            body.DespesaContaId = id ;
 
-            _context.Entry<Despesa>(result).State = EntityState.Detached;
-            _context.Entry<Despesa>(body).State = EntityState.Modified;
+            _context.Entry<DespesaConta>(result).State = EntityState.Detached;
+            _context.Entry<DespesaConta>(body).State = EntityState.Modified;
             
-            _context.Despesas.Update(body);
+            _context.DespesasConta.Update(body);
             await _context.SaveChangesAsync();
 
             return Ok(body);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Despesa>> Create(Despesa body)
+        public async Task<ActionResult<DespesaConta>> Create(DespesaConta body)
         {
-            await _context.Despesas.AddAsync(body);
+            await _context.DespesasConta.AddAsync(body);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(body);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Despesa result = await _context.Despesas.FindAsync(id);
+            DespesaConta result = await _context.DespesasConta.FindAsync(id);
             if (result == null ){
                 return NotFound (); 
             }

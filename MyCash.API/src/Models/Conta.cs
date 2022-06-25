@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MyCash.API.Models;
 
 namespace src.Models
@@ -12,7 +13,9 @@ namespace src.Models
         public int CategoriaContaId { get; set; }
         public CategoriaConta Categoria { get; set; }
         public int UsuarioId { get; set; } 
-        public Usuario Usuario { get; set; }    
+        public Usuario Usuario { get; set; }   
+        public IEnumerable<DespesaConta> DespesasConta { get; set; } 
+        public IEnumerable<CartaoCredito> CartoesCredito { get; set; }
 
     }
 }

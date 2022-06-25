@@ -14,6 +14,6 @@ namespace src.Models
         public double ValorFatura { get; set; } 
         public bool isFaturaVencida { get; set; }
         public bool isFaturaPaga { get; set; }
-        public List<Despesa> Despesas { get; set; }
+        
     }
 }

@@ -58,10 +58,16 @@ namespace src.Controllers
         [HttpPost]
         public async Task<ActionResult<SubcategoriaDespesa>> Create(SubcategoriaDespesa body)
         {
+            
+            CategoriaDespesa categoriaDespesa = await _context.CategoriasDespesas.FindAsync(body.CategoriaDespesaId);
+            body.CategoriaDespesa = categoriaDespesa;
+
             await _context.SubcategoriasDespesas.AddAsync(body);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            body.CategoriaDespesa.SubcategoriasDespesa = null;
+
+            return Ok(body);
         }
 
         [HttpDelete("{id}")]

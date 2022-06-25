@@ -61,7 +61,7 @@ namespace MyCash.API.Controllers
             await _context.Usuarios.AddAsync(body);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(body);
         }
 
         [HttpDelete("{id}")]
