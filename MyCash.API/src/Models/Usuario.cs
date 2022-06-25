@@ -9,6 +9,7 @@ namespace src.Models
         public string Sobrenome { get; set; }   
         public string Email { get; set; }
         public string Senha { get; set; }   
-        public List<Conta> Contas { get; set; }
+        public IEnumerable<Conta> Contas { get; set; }
+         public IEnumerable<CartaoCredito> CatoesCredito { get; set; }
     }
 }

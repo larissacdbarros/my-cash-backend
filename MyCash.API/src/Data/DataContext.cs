@@ -16,7 +16,8 @@ namespace src.Data
         public DbSet<CategoriaDespesa> CategoriasDespesas  {get; set;}
         public DbSet<CategoriaReceita> CategoriasReceitas  {get; set;}
         public DbSet<Conta> Contas {get; set;}
-        public DbSet<Despesa> Despesas  {get; set;}
+        public DbSet<DespesaConta> DespesasConta  {get; set;}
+         public DbSet<DespesaCartao> DespesasCartao  {get; set;}
         public DbSet<Fatura> Faturas  {get; set;}
         public DbSet<Meta> Metas  {get; set;}
         public DbSet<Objetivo> Objetivos  {get; set;}

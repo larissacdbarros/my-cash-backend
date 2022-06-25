@@ -61,7 +61,7 @@ namespace src.Controllers
             await _context.Bancos.AddAsync(body);
             await _context.SaveChangesAsync();
 
-            return Ok();
+            return Ok(body);
         }
 
         [HttpDelete("{id}")]

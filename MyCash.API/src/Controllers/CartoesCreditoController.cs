@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,6 +22,11 @@ namespace src.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CartaoCredito>>> GetAll()
         {
+            List<CartaoCredito> cartaoCredito = await _context.CartoesCredito.ToListAsync();
+            foreach(CartaoCredito cartao in cartaoCredito){
+                BandeiraCartao bandeiraCartao = await _context.BandeirasCartoes.FindAsync(cartao.BandeiraCartaoId);
+            }
+            
             return await _context.CartoesCredito.ToListAsync();
         }
 
@@ -28,6 +34,7 @@ namespace src.Controllers
         public async Task<ActionResult<CartaoCredito>> GetById(int id)
         {
             CartaoCredito result = await _context.CartoesCredito.FindAsync(id);
+            BandeiraCartao bandeiraCartao = await _context.BandeirasCartoes.FindAsync(result.BandeiraCartaoId);
 
             if (result == null)
             {
@@ -45,6 +52,8 @@ namespace src.Controllers
             }
 
             body.CartaoCreditoId = id ;
+            BandeiraCartao bandeiraCartao = await _context.BandeirasCartoes.FindAsync(body.BandeiraCartaoId);
+            body.BandeiraCartao = bandeiraCartao;
 
             _context.Entry<CartaoCredito>(result).State = EntityState.Detached;
             _context.Entry<CartaoCredito>(body).State = EntityState.Modified;
@@ -58,10 +67,18 @@ namespace src.Controllers
         [HttpPost]
         public async Task<ActionResult<CartaoCredito>> Create(CartaoCredito body)
         {
+            BandeiraCartao bandeiraCartao = await _context.BandeirasCartoes.FindAsync(body.BandeiraCartaoId);
+            body.BandeiraCartao = bandeiraCartao;
+            
+            Conta conta = await _context.Contas.FindAsync(body.ContaId);
+            body.Conta = conta;
+
             await _context.CartoesCredito.AddAsync(body);
             await _context.SaveChangesAsync();
+            
+            body.Conta.CartoesCredito =null;
 
-            return Ok();
+            return Ok(body);
         }
 
         [HttpDelete("{id}")]
