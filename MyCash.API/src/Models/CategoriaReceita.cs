@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace src.Models
 {
     public class CategoriaReceita
@@ -5,8 +7,7 @@ namespace src.Models
         public int CategoriaReceitaId { get; set; }
         public string Tipo { get; set; }    
         public string Icone { get; set; }
-        public int SubcategoriaReceitaId { get; set; }
-        public SubcategoriaReceita SubcatecoriaReceita { get; set; }
+       public IEnumerable<SubcategoriaReceita> SubcategoriasReceita { get; set; }
 
     }
 }

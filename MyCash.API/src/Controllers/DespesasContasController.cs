@@ -9,24 +9,24 @@ namespace src.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class MetasController: ControllerBase
+    public class DespesasContaController : ControllerBase
     {
         private readonly DataContext _context;
-        public MetasController(DataContext context)
+       public DespesasContaController(DataContext context)
         {
             _context = context;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Meta>>> GetAll()
+        public async Task<ActionResult<IEnumerable<DespesaConta>>> GetAll()
         {
-            return await _context.Metas.ToListAsync();
+            return await _context.DespesasConta.ToListAsync();
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Meta>> GetById(int id)
+        public async Task<ActionResult<DespesaConta>> GetById(int id)
         {
-            Meta result = await _context.Metas.FindAsync(id);
+            DespesaConta result = await _context.DespesasConta.FindAsync(id);
 
             if (result == null)
             {
@@ -36,28 +36,28 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Meta body)
+        public async Task<IActionResult> Update(int id, DespesaConta body)
         {
-            Meta result = await _context.Metas.FindAsync(id);
+            DespesaConta result = await _context.DespesasConta.FindAsync(id);
             if(result == null){
                 return NotFound();
             }
 
-            body.MetaId = id ;
+            body.DespesaContaId = id ;
 
-            _context.Entry<Meta>(result).State = EntityState.Detached;
-            _context.Entry<Meta>(body).State = EntityState.Modified;
+            _context.Entry<DespesaConta>(result).State = EntityState.Detached;
+            _context.Entry<DespesaConta>(body).State = EntityState.Modified;
             
-            _context.Metas.Update(body);
+            _context.DespesasConta.Update(body);
             await _context.SaveChangesAsync();
 
             return Ok(body);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Meta>> Create(Meta body)
+        public async Task<ActionResult<DespesaConta>> Create(DespesaConta body)
         {
-            await _context.Metas.AddAsync(body);
+            await _context.DespesasConta.AddAsync(body);
             await _context.SaveChangesAsync();
 
             return Ok(body);
@@ -66,7 +66,7 @@ namespace src.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Meta result = await _context.Metas.FindAsync(id);
+            DespesaConta result = await _context.DespesasConta.FindAsync(id);
             if (result == null ){
                 return NotFound (); 
             }

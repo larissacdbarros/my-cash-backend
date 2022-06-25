@@ -83,15 +83,25 @@ namespace MyCash.API.Data.Migrations
                     b.Property<int>("BandeiraCartaoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ContaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("LimiteCartao")
                         .HasColumnType("float");
 
+                    b.Property<int?>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("CartaoCreditoId");
 
                     b.HasIndex("BandeiraCartaoId");
+
+                    b.HasIndex("ContaId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("CartoesCredito");
                 });
@@ -106,15 +116,10 @@ namespace MyCash.API.Data.Migrations
                     b.Property<string>("Icone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubcategoriaDespesaId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Tipo")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoriaDespesaId");
-
-                    b.HasIndex("SubcategoriaDespesaId");
 
                     b.ToTable("CategoriasDespesas");
                 });
@@ -129,15 +134,10 @@ namespace MyCash.API.Data.Migrations
                     b.Property<string>("Icone")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SubcategoriaReceitaId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Tipo")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoriaReceitaId");
-
-                    b.HasIndex("SubcategoriaReceitaId");
 
                     b.ToTable("CategoriasReceitas");
                 });
@@ -175,9 +175,9 @@ namespace MyCash.API.Data.Migrations
                     b.ToTable("Contas");
                 });
 
-            modelBuilder.Entity("src.Models.Despesa", b =>
+            modelBuilder.Entity("src.Models.DespesaCartao", b =>
                 {
-                    b.Property<int>("DespesaId")
+                    b.Property<int>("DespesaCartaoId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -185,8 +185,30 @@ namespace MyCash.API.Data.Migrations
                     b.Property<int>("CartaoCreditoId")
                         .HasColumnType("int");
 
-                    b.Property<int>("CategoriaDespesaId")
+                    b.Property<string>("Descricao")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SubcategoriaDespesaId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
+
+                    b.HasKey("DespesaCartaoId");
+
+                    b.HasIndex("CartaoCreditoId");
+
+                    b.HasIndex("SubcategoriaDespesaId");
+
+                    b.ToTable("DespesasCartao");
+                });
+
+            modelBuilder.Entity("src.Models.DespesaConta", b =>
+                {
+                    b.Property<int>("DespesaContaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("ContaId")
                         .HasColumnType("int");
@@ -194,23 +216,19 @@ namespace MyCash.API.Data.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FaturaId")
+                    b.Property<int>("SubcategoriaDespesaId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsDespesaCartaoCredito")
-                        .HasColumnType("bit");
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
 
-                    b.HasKey("DespesaId");
-
-                    b.HasIndex("CartaoCreditoId");
-
-                    b.HasIndex("CategoriaDespesaId");
+                    b.HasKey("DespesaContaId");
 
                     b.HasIndex("ContaId");
 
-                    b.HasIndex("FaturaId");
+                    b.HasIndex("SubcategoriaDespesaId");
 
-                    b.ToTable("Despesas");
+                    b.ToTable("DespesasConta");
                 });
 
             modelBuilder.Entity("src.Models.Fatura", b =>
@@ -308,20 +326,20 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CategoriaReceitaId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ContaId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SubcategoriaReceitaId")
+                        .HasColumnType("int");
+
                     b.HasKey("ReceitaId");
 
-                    b.HasIndex("CategoriaReceitaId");
-
                     b.HasIndex("ContaId");
+
+                    b.HasIndex("SubcategoriaReceitaId");
 
                     b.ToTable("Receitas");
                 });
@@ -333,6 +351,9 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoriaDespesaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Icone")
                         .HasColumnType("nvarchar(max)");
 
@@ -340,6 +361,8 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubcategoriaDespesaId");
+
+                    b.HasIndex("CategoriaDespesaId");
 
                     b.ToTable("SubcategoriasDespesas");
                 });
@@ -351,6 +374,9 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("CategoriaReceitaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Icone")
                         .HasColumnType("nvarchar(max)");
 
@@ -358,6 +384,8 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SubcategoriaReceitaId");
+
+                    b.HasIndex("CategoriaReceitaId");
 
                     b.ToTable("SubcategoriasReceitas");
                 });
@@ -394,29 +422,19 @@ namespace MyCash.API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("src.Models.Conta", "Conta")
+                        .WithMany("CartoesCredito")
+                        .HasForeignKey("ContaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("src.Models.Usuario", null)
+                        .WithMany("CatoesCredito")
+                        .HasForeignKey("UsuarioId");
+
                     b.Navigation("BandeiraCartao");
-                });
 
-            modelBuilder.Entity("src.Models.CategoriaDespesa", b =>
-                {
-                    b.HasOne("src.Models.SubcategoriaDespesa", "SubcategoriaDespesa")
-                        .WithMany()
-                        .HasForeignKey("SubcategoriaDespesaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SubcategoriaDespesa");
-                });
-
-            modelBuilder.Entity("src.Models.CategoriaReceita", b =>
-                {
-                    b.HasOne("src.Models.SubcategoriaReceita", "SubcatecoriaReceita")
-                        .WithMany()
-                        .HasForeignKey("SubcategoriaReceitaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("SubcatecoriaReceita");
+                    b.Navigation("Conta");
                 });
 
             modelBuilder.Entity("src.Models.Conta", b =>
@@ -446,35 +464,42 @@ namespace MyCash.API.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("src.Models.Despesa", b =>
+            modelBuilder.Entity("src.Models.DespesaCartao", b =>
                 {
                     b.HasOne("src.Models.CartaoCredito", "CartaoCredito")
-                        .WithMany()
+                        .WithMany("DespesasCartao")
                         .HasForeignKey("CartaoCreditoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("src.Models.CategoriaDespesa", "CategoriaDespesa")
+                    b.HasOne("src.Models.SubcategoriaDespesa", "SubcategoriaDespesa")
                         .WithMany()
-                        .HasForeignKey("CategoriaDespesaId")
+                        .HasForeignKey("SubcategoriaDespesaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("CartaoCredito");
+
+                    b.Navigation("SubcategoriaDespesa");
+                });
+
+            modelBuilder.Entity("src.Models.DespesaConta", b =>
+                {
                     b.HasOne("src.Models.Conta", "Conta")
-                        .WithMany()
+                        .WithMany("DespesasConta")
                         .HasForeignKey("ContaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("src.Models.Fatura", null)
-                        .WithMany("Despesas")
-                        .HasForeignKey("FaturaId");
-
-                    b.Navigation("CartaoCredito");
-
-                    b.Navigation("CategoriaDespesa");
+                    b.HasOne("src.Models.SubcategoriaDespesa", "SubcategoriaDespesa")
+                        .WithMany()
+                        .HasForeignKey("SubcategoriaDespesaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Conta");
+
+                    b.Navigation("SubcategoriaDespesa");
                 });
 
             modelBuilder.Entity("src.Models.Fatura", b =>
@@ -501,30 +526,71 @@ namespace MyCash.API.Data.Migrations
 
             modelBuilder.Entity("src.Models.Receita", b =>
                 {
-                    b.HasOne("src.Models.CategoriaReceita", "CategoriaReceita")
-                        .WithMany()
-                        .HasForeignKey("CategoriaReceitaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("src.Models.Conta", "Conta")
                         .WithMany()
                         .HasForeignKey("ContaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CategoriaReceita");
+                    b.HasOne("src.Models.SubcategoriaReceita", "SubcategoriaReceita")
+                        .WithMany()
+                        .HasForeignKey("SubcategoriaReceitaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Conta");
+
+                    b.Navigation("SubcategoriaReceita");
                 });
 
-            modelBuilder.Entity("src.Models.Fatura", b =>
+            modelBuilder.Entity("src.Models.SubcategoriaDespesa", b =>
                 {
-                    b.Navigation("Despesas");
+                    b.HasOne("src.Models.CategoriaDespesa", "CategoriaDespesa")
+                        .WithMany("SubcategoriasDespesa")
+                        .HasForeignKey("CategoriaDespesaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoriaDespesa");
+                });
+
+            modelBuilder.Entity("src.Models.SubcategoriaReceita", b =>
+                {
+                    b.HasOne("src.Models.CategoriaReceita", "CategoriaReceita")
+                        .WithMany("SubcategoriasReceita")
+                        .HasForeignKey("CategoriaReceitaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CategoriaReceita");
+                });
+
+            modelBuilder.Entity("src.Models.CartaoCredito", b =>
+                {
+                    b.Navigation("DespesasCartao");
+                });
+
+            modelBuilder.Entity("src.Models.CategoriaDespesa", b =>
+                {
+                    b.Navigation("SubcategoriasDespesa");
+                });
+
+            modelBuilder.Entity("src.Models.CategoriaReceita", b =>
+                {
+                    b.Navigation("SubcategoriasReceita");
+                });
+
+            modelBuilder.Entity("src.Models.Conta", b =>
+                {
+                    b.Navigation("CartoesCredito");
+
+                    b.Navigation("DespesasConta");
                 });
 
             modelBuilder.Entity("src.Models.Usuario", b =>
                 {
+                    b.Navigation("CatoesCredito");
+
                     b.Navigation("Contas");
                 });
 #pragma warning restore 612, 618
