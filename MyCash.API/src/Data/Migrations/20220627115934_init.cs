@@ -253,7 +253,8 @@ namespace MyCash.API.Data.Migrations
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubcategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
                     ContaId = table.Column<int>(type: "int", nullable: false),
-                    Valor = table.Column<double>(type: "float", nullable: false)
+                    Valor = table.Column<double>(type: "float", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -280,7 +281,8 @@ namespace MyCash.API.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubcategoriaReceitaId = table.Column<int>(type: "int", nullable: false),
-                    ContaId = table.Column<int>(type: "int", nullable: false)
+                    ContaId = table.Column<int>(type: "int", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -308,7 +310,8 @@ namespace MyCash.API.Data.Migrations
                     CartaoCreditoId = table.Column<int>(type: "int", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubcategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
-                    Valor = table.Column<double>(type: "float", nullable: false)
+                    Valor = table.Column<double>(type: "float", nullable: false),
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
