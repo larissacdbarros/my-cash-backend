@@ -22,6 +22,11 @@ namespace src.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubcategoriaReceita>>> GetAll()
         {
+            List<SubcategoriaReceita> subcategoriasReceita = await _context.SubcategoriasReceitas.ToListAsync();
+            foreach(SubcategoriaReceita subcategoria in subcategoriasReceita){
+                CategoriaReceita categoriaReceita = await _context.CategoriasReceitas.FindAsync(subcategoria.CategoriaReceitaId);
+                subcategoria.CategoriaReceita.SubcategoriasReceita = null;
+            }
             return await _context.SubcategoriasReceitas.ToListAsync();
         }
 
@@ -29,11 +34,16 @@ namespace src.Controllers
         public async Task<ActionResult<SubcategoriaReceita>> GetById(int id)
         {
             SubcategoriaReceita result = await _context.SubcategoriasReceitas.FindAsync(id);
-
+            
             if (result == null)
             {
                 return NotFound();
             }
+
+            CategoriaReceita categoriaReceita = await _context.CategoriasReceitas.FindAsync(result.CategoriaReceitaId);
+
+            result.CategoriaReceita.SubcategoriasReceita = null;
+
             return result;
         }
 
@@ -47,11 +57,16 @@ namespace src.Controllers
 
             body.SubcategoriaReceitaId = id ;
 
+            CategoriaReceita categoriaReceita = await _context.CategoriasReceitas.FindAsync(result.CategoriaReceitaId);
+            body.CategoriaReceita = categoriaReceita;
+
             _context.Entry<SubcategoriaReceita>(result).State = EntityState.Detached;
             _context.Entry<SubcategoriaReceita>(body).State = EntityState.Modified;
             
             _context.SubcategoriasReceitas.Update(body);
             await _context.SaveChangesAsync();
+
+            body.CategoriaReceita.SubcategoriasReceita = null;
 
             return Ok(body);
         }
@@ -59,8 +74,13 @@ namespace src.Controllers
         [HttpPost]
         public async Task<ActionResult<SubcategoriaReceita>> Create(SubcategoriaReceita body)
         {
+            CategoriaReceita categoriaReceita = await _context.CategoriasReceitas.FindAsync(body.CategoriaReceitaId);
+            body.CategoriaReceita = categoriaReceita;
+
             await _context.SubcategoriasReceitas.AddAsync(body);
             await _context.SaveChangesAsync();
+
+            body.CategoriaReceita.SubcategoriasReceita =null;
 
             return Ok(body);
         }
