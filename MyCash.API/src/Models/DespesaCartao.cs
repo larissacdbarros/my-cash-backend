@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace src.Models
@@ -11,5 +12,6 @@ namespace src.Models
         public int SubcategoriaDespesaId { get; set; }
         public SubcategoriaDespesa SubcategoriaDespesa  { get; set; }
         public double Valor { get; set; }
+        public DateTime Data { get; set; }
     }
 }

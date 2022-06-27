@@ -10,8 +10,8 @@ using src.Data;
 namespace MyCash.API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220624215359_init")]
-    partial class init
+    [Migration("20220627121328_t")]
+    partial class t
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -187,6 +187,9 @@ namespace MyCash.API.Data.Migrations
                     b.Property<int>("CartaoCreditoId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
@@ -214,6 +217,9 @@ namespace MyCash.API.Data.Migrations
 
                     b.Property<int>("ContaId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
@@ -330,6 +336,9 @@ namespace MyCash.API.Data.Migrations
 
                     b.Property<int>("ContaId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
