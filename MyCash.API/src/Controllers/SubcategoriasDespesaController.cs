@@ -21,18 +21,29 @@ namespace src.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubcategoriaDespesa>>> GetAll()
         {
+            List<SubcategoriaDespesa> subcategoriaDespesas = await _context.SubcategoriasDespesas.ToListAsync();
+            foreach(SubcategoriaDespesa subcategoria in subcategoriaDespesas){
+                CategoriaDespesa categoriaDespesa = await _context.CategoriasDespesas.FindAsync(subcategoria.CategoriaDespesaId);
+                subcategoria.CategoriaDespesa.SubcategoriasDespesa = null;
+            }
             return await _context.SubcategoriasDespesas.ToListAsync();
+            
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<SubcategoriaDespesa>> GetById(int id)
         {
             SubcategoriaDespesa result = await _context.SubcategoriasDespesas.FindAsync(id);
-
+            
             if (result == null)
             {
                 return NotFound();
             }
+
+            CategoriaDespesa categoriaDespesa = await _context.CategoriasDespesas.FindAsync(result.CategoriaDespesaId);
+
+            result.CategoriaDespesa.SubcategoriasDespesa = null;
+
             return result;
         }
 
@@ -46,11 +57,16 @@ namespace src.Controllers
 
             body.SubcategoriaDespesaId = id ;
 
+            CategoriaDespesa categoriaDespesa = await _context.CategoriasDespesas.FindAsync(result.CategoriaDespesaId);
+            body.CategoriaDespesa = categoriaDespesa;
+
             _context.Entry<SubcategoriaDespesa>(result).State = EntityState.Detached;
             _context.Entry<SubcategoriaDespesa>(body).State = EntityState.Modified;
             
             _context.SubcategoriasDespesas.Update(body);
             await _context.SaveChangesAsync();
+            
+            body.CategoriaDespesa.SubcategoriasDespesa = null;
 
             return Ok(body);
         }
