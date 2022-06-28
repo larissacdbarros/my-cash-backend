@@ -10,8 +10,8 @@ using src.Data;
 namespace MyCash.API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220627115934_init")]
-    partial class init
+    [Migration("20220628013847_alteracoes-receita-model")]
+    partial class alteracoesreceitamodel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -165,6 +165,9 @@ namespace MyCash.API.Data.Migrations
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
 
                     b.HasKey("ContaId");
 
@@ -345,6 +348,9 @@ namespace MyCash.API.Data.Migrations
 
                     b.Property<int>("SubcategoriaReceitaId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
 
                     b.HasKey("ReceitaId");
 

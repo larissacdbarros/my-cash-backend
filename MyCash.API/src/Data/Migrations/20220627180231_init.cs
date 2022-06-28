@@ -184,7 +184,8 @@ namespace MyCash.API.Data.Migrations
                     BancoId = table.Column<int>(type: "int", nullable: false),
                     SaldoAtual = table.Column<double>(type: "float", nullable: false),
                     CategoriaContaId = table.Column<int>(type: "int", nullable: false),
-                    UsuarioId = table.Column<int>(type: "int", nullable: false)
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
+                    Valor = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {

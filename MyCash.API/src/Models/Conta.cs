@@ -14,6 +14,7 @@ namespace src.Models
         public CategoriaConta Categoria { get; set; }
         public int UsuarioId { get; set; } 
         public Usuario Usuario { get; set; }   
+        public double Valor { get; set; }
         public IEnumerable<DespesaConta> DespesasConta { get; set; } 
         public IEnumerable<CartaoCredito> CartoesCredito { get; set; }
 
