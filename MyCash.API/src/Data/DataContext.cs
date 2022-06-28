@@ -6,7 +6,9 @@ namespace src.Data
 {
     public class DataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) {
+
+        }
 
         public DbSet<Usuario> Usuarios {get; set;}
         public DbSet<Banco> Bancos  {get; set;}

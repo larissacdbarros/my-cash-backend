@@ -164,6 +164,9 @@ namespace MyCash.API.Data.Migrations
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
+
                     b.HasKey("ContaId");
 
                     b.HasIndex("BancoId");
@@ -343,6 +346,9 @@ namespace MyCash.API.Data.Migrations
 
                     b.Property<int>("SubcategoriaReceitaId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
 
                     b.HasKey("ReceitaId");
 

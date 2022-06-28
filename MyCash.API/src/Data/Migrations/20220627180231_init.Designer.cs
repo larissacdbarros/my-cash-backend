@@ -10,8 +10,8 @@ using src.Data;
 namespace MyCash.API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220627121328_t")]
-    partial class t
+    [Migration("20220627180231_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -165,6 +165,9 @@ namespace MyCash.API.Data.Migrations
 
                     b.Property<int>("UsuarioId")
                         .HasColumnType("int");
+
+                    b.Property<double>("Valor")
+                        .HasColumnType("float");
 
                     b.HasKey("ContaId");
 
