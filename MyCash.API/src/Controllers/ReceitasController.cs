@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using MyCash.API.Models;
 using src.Data;
 using src.Models;
+using src.Models.DTO;
 
 namespace src.Controllers
 {
@@ -50,71 +51,84 @@ namespace src.Controllers
             }
 
             SubcategoriaReceita subcategoriaReceita = await _context.SubcategoriasReceitas.FindAsync(result.SubcategoriaReceitaId);
+            CategoriaReceita categoriaReceita = await _context.CategoriasReceitas.FindAsync(result.SubcategoriaReceita.CategoriaReceitaId);
+
+
             Conta conta = await _context.Contas.FindAsync(result.ContaId);
 
-            result.SubcategoriaReceita.CategoriaReceita = null;
+            
+
+            result.SubcategoriaReceita.CategoriaReceita.SubcategoriasReceita = null;
             result.Conta.Usuario =null;
             result.Conta.DespesasConta = null;
             result.Conta.CartoesCredito = null;
+
+            
 
 
             return result;
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Receita body)
+        public async Task<IActionResult> Update(int id, ReceitaReqDTO body)
         {
             Receita result = await _context.Receitas.FindAsync(id);
+            
             if(result == null){
                 return NotFound();
             }
 
-            body.ReceitaId = id ;
+            Receita receita = new Receita(body); 
 
-            SubcategoriaReceita subcategoriaReceita = await _context.SubcategoriasReceitas.FindAsync(body.SubcategoriaReceitaId);
-            body.SubcategoriaReceita = subcategoriaReceita;
+            receita.ReceitaId = id ;
 
-            Conta conta = await _context.Contas.FindAsync(body.ContaId);
-            body.Conta = conta;
 
-            Banco banco = await _context.Bancos.FindAsync(body.Conta.BancoId);
-            body.Conta.Banco = banco;
+            SubcategoriaReceita subcategoriaReceita = await _context.SubcategoriasReceitas.FindAsync(receita.SubcategoriaReceitaId);
+            receita.SubcategoriaReceita = subcategoriaReceita;
+
+            Conta conta = await _context.Contas.FindAsync(receita.ContaId);
+            receita.Conta = conta;
+
+            Banco banco = await _context.Bancos.FindAsync(receita.Conta.BancoId);
+            receita.Conta.Banco = banco;
 
             _context.Entry<Receita>(result).State = EntityState.Detached;
-            _context.Entry<Receita>(body).State = EntityState.Modified;
+            _context.Entry<Receita>(receita).State = EntityState.Modified;
             
-            _context.Receitas.Update(body);
+            _context.Receitas.Update(receita);
             await _context.SaveChangesAsync();
 
-           body.SubcategoriaReceita.CategoriaReceita =null;
-            body.Conta.Usuario =null;
-            body.Conta.DespesasConta = null;
-            body.Conta.CartoesCredito = null;
+            receita.SubcategoriaReceita.CategoriaReceita =null;
+            receita.Conta.Usuario =null;
+            receita.Conta.DespesasConta = null;
+            receita.Conta.CartoesCredito = null;
 
-            return Ok(body);
+            return Ok(receita);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Receita>> Create(Receita body)
+        public async Task<ActionResult<Receita>> Create(ReceitaReqDTO body)
         {
-            SubcategoriaReceita subcategoriaReceita = await _context.SubcategoriasReceitas.FindAsync(body.SubcategoriaReceitaId);
-            body.SubcategoriaReceita = subcategoriaReceita;
+            Receita receita = new Receita(body); 
 
-            Conta conta = await _context.Contas.FindAsync(body.ContaId);
-            body.Conta = conta;
+            SubcategoriaReceita subcategoriaReceita = await _context.SubcategoriasReceitas.FindAsync(receita.SubcategoriaReceitaId);
+            receita.SubcategoriaReceita = subcategoriaReceita;
 
-            Banco banco = await _context.Bancos.FindAsync(body.Conta.BancoId);
-            body.Conta.Banco = banco;
+            Conta conta = await _context.Contas.FindAsync(receita.ContaId);
+            receita.Conta = conta;
+
+            Banco banco = await _context.Bancos.FindAsync(receita.Conta.BancoId);
+            receita.Conta.Banco = banco;
             
-            await _context.Receitas.AddAsync(body);
+            await _context.Receitas.AddAsync(receita);
             await _context.SaveChangesAsync();
 
-            body.SubcategoriaReceita.CategoriaReceita =null;
-            body.Conta.Usuario =null;
-            body.Conta.DespesasConta = null;
-            body.Conta.CartoesCredito = null;
+            receita.SubcategoriaReceita.CategoriaReceita =null;
+            receita.Conta.Usuario =null;
+            receita.Conta.DespesasConta = null;
+            receita.Conta.CartoesCredito = null;
 
-            return Ok(body);
+            return Ok(receita);
         }
 
         [HttpDelete("{id}")]
