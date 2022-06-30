@@ -14,6 +14,7 @@ namespace src.Models
         public int ContaId { get; set; }
         public Conta Conta { get; set; }
         public double Valor { get; set; }
+        [Column(TypeName="Date")]
         public DateTime Data { get; set; }
     
 
@@ -23,7 +24,7 @@ namespace src.Models
 
     }
 
-    public DespesaConta( DespesaContaReqDTO dto)
+    public DespesaConta(DespesaContaReqDTO dto)
         {
             
             this.Descricao = dto.Descricao;

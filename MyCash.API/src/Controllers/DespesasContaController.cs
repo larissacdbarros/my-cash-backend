@@ -27,10 +27,12 @@ namespace src.Controllers
 
              
             return await _context.DespesasConta
-                .Include(despesasConta => despesasConta.SubcategoriaDespesa)
-                .ThenInclude(subcategoriaDepesa => subcategoriaDepesa.CategoriaDespesa)
-                .Include(SubcategoriaDespesa => SubcategoriaDespesa.Conta).ThenInclude(conta => conta.Banco)
-                .Include(SubcategoriaDespesa => SubcategoriaDespesa.Conta).ThenInclude(conta => conta.Usuario)
+                .Include(despesaConta => despesaConta.SubcategoriaDespesa)
+                .ThenInclude(subcategoriaDespesa => subcategoriaDespesa.CategoriaDespesa)
+                .Include(despesaConta => despesaConta.Conta)
+                .ThenInclude(conta => conta.Banco)
+                .Include(despesaConta => despesaConta.Conta)
+                .ThenInclude(conta => conta.Usuario)
                 .ToListAsync();
                 
                
@@ -42,11 +44,13 @@ namespace src.Controllers
         {
 
             var result = await _context.DespesasConta
-            .Include(DespesaConta => DespesaConta.SubcategoriaDespesa)
-            .ThenInclude(SubcategoriaDespesa => SubcategoriaDespesa.CategoriaDespesa)
-            .Include(DespesaConta => DespesaConta.Conta).ThenInclude(conta => conta.Banco)
-            .Include(DespesaConta => DespesaConta.Conta).ThenInclude(conta => conta.Usuario)
-            .Where(DespesaConta => DespesaConta.DespesaContaId == id)
+            .Include(despesaConta => despesaConta.SubcategoriaDespesa)
+            .ThenInclude(subcategoriaDespesa => subcategoriaDespesa.CategoriaDespesa)
+            .Include(despesaConta => despesaConta.Conta)
+            .ThenInclude(conta => conta.Banco)
+            .Include(despesaConta => despesaConta.Conta)
+            .ThenInclude(conta => conta.Usuario)
+            .Where(despesaConta => despesaConta.DespesaContaId == id)
             .FirstOrDefaultAsync();
 
             if (result == null)
@@ -98,7 +102,7 @@ namespace src.Controllers
             DespesaConta despesaConta = new DespesaConta(body);
 
             SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(despesaConta.SubcategoriaDespesaId);
-             despesaConta.SubcategoriaDespesa = subcategoriaDespesa;
+            despesaConta.SubcategoriaDespesa = subcategoriaDespesa;
 
             Conta conta = await _context.Contas.FindAsync(despesaConta.ContaId);
             despesaConta.Conta = conta;
