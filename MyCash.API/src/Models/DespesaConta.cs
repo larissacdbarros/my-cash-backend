@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using src.Models.DTO;
 
 namespace src.Models
 {
@@ -14,5 +15,24 @@ namespace src.Models
         public Conta Conta { get; set; }
         public double Valor { get; set; }
         public DateTime Data { get; set; }
+    
+
+
+    public DespesaConta()
+    {
+
     }
+
+    public DespesaConta( DespesaContaReqDTO dto)
+        {
+            
+            this.Descricao = dto.Descricao;
+            this.SubcategoriaDespesaId = dto.SubcategoriaDespesaId;
+            this.ContaId = dto.ContaId;
+            this.Valor = dto.Valor;
+            this.Data = dto.Data;
+
+        }
+    
+}
 }
