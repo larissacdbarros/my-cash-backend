@@ -194,6 +194,9 @@ namespace MyCash.API.Data.Migrations
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("FaturaId")
+                        .HasColumnType("int");
+
                     b.Property<int>("SubcategoriaDespesaId")
                         .HasColumnType("int");
 
@@ -203,6 +206,8 @@ namespace MyCash.API.Data.Migrations
                     b.HasKey("DespesaCartaoId");
 
                     b.HasIndex("CartaoCreditoId");
+
+                    b.HasIndex("FaturaId");
 
                     b.HasIndex("SubcategoriaDespesaId");
 
@@ -247,9 +252,6 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CartaoCreditoId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DataFechamentoFatura")
                         .HasColumnType("datetime2");
 
@@ -269,8 +271,6 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("FaturaId");
-
-                    b.HasIndex("CartaoCreditoId");
 
                     b.ToTable("Faturas");
                 });
@@ -487,6 +487,12 @@ namespace MyCash.API.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("src.Models.Fatura", "Fatura")
+                        .WithMany("DespesasCartao")
+                        .HasForeignKey("FaturaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("src.Models.SubcategoriaDespesa", "SubcategoriaDespesa")
                         .WithMany()
                         .HasForeignKey("SubcategoriaDespesaId")
@@ -494,6 +500,8 @@ namespace MyCash.API.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("CartaoCredito");
+
+                    b.Navigation("Fatura");
 
                     b.Navigation("SubcategoriaDespesa");
                 });
@@ -515,17 +523,6 @@ namespace MyCash.API.Data.Migrations
                     b.Navigation("Conta");
 
                     b.Navigation("SubcategoriaDespesa");
-                });
-
-            modelBuilder.Entity("src.Models.Fatura", b =>
-                {
-                    b.HasOne("src.Models.CartaoCredito", "CartaoCredito")
-                        .WithMany()
-                        .HasForeignKey("CartaoCreditoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CartaoCredito");
                 });
 
             modelBuilder.Entity("src.Models.Meta", b =>
@@ -600,6 +597,11 @@ namespace MyCash.API.Data.Migrations
                     b.Navigation("CartoesCredito");
 
                     b.Navigation("DespesasConta");
+                });
+
+            modelBuilder.Entity("src.Models.Fatura", b =>
+                {
+                    b.Navigation("DespesasCartao");
                 });
 
             modelBuilder.Entity("src.Models.Usuario", b =>

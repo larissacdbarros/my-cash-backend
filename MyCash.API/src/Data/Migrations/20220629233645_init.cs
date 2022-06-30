@@ -78,6 +78,24 @@ namespace MyCash.API.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Faturas",
+                columns: table => new
+                {
+                    FaturaId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DataFechamentoFatura = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataVencimentoFatura = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Mes = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ValorFatura = table.Column<double>(type: "float", nullable: false),
+                    isFaturaVencida = table.Column<bool>(type: "bit", nullable: false),
+                    isFaturaPaga = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Faturas", x => x.FaturaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Objetivos",
                 columns: table => new
                 {
@@ -283,7 +301,8 @@ namespace MyCash.API.Data.Migrations
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubcategoriaReceitaId = table.Column<int>(type: "int", nullable: false),
                     ContaId = table.Column<int>(type: "int", nullable: false),
-                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Valor = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -312,7 +331,8 @@ namespace MyCash.API.Data.Migrations
                     Descricao = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SubcategoriaDespesaId = table.Column<int>(type: "int", nullable: false),
                     Valor = table.Column<double>(type: "float", nullable: false),
-                    Data = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FaturaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -324,35 +344,16 @@ namespace MyCash.API.Data.Migrations
                         principalColumn: "CartaoCreditoId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_DespesasCartao_Faturas_FaturaId",
+                        column: x => x.FaturaId,
+                        principalTable: "Faturas",
+                        principalColumn: "FaturaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_DespesasCartao_SubcategoriasDespesas_SubcategoriaDespesaId",
                         column: x => x.SubcategoriaDespesaId,
                         principalTable: "SubcategoriasDespesas",
                         principalColumn: "SubcategoriaDespesaId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Faturas",
-                columns: table => new
-                {
-                    FaturaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CartaoCreditoId = table.Column<int>(type: "int", nullable: false),
-                    DataFechamentoFatura = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataVencimentoFatura = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Mes = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ValorFatura = table.Column<double>(type: "float", nullable: false),
-                    isFaturaVencida = table.Column<bool>(type: "bit", nullable: false),
-                    isFaturaPaga = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Faturas", x => x.FaturaId);
-                    table.ForeignKey(
-                        name: "FK_Faturas_CartoesCredito_CartaoCreditoId",
-                        column: x => x.CartaoCreditoId,
-                        principalTable: "CartoesCredito",
-                        principalColumn: "CartaoCreditoId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -392,6 +393,11 @@ namespace MyCash.API.Data.Migrations
                 column: "CartaoCreditoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DespesasCartao_FaturaId",
+                table: "DespesasCartao",
+                column: "FaturaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_DespesasCartao_SubcategoriaDespesaId",
                 table: "DespesasCartao",
                 column: "SubcategoriaDespesaId");
@@ -405,11 +411,6 @@ namespace MyCash.API.Data.Migrations
                 name: "IX_DespesasConta_SubcategoriaDespesaId",
                 table: "DespesasConta",
                 column: "SubcategoriaDespesaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Faturas_CartaoCreditoId",
-                table: "Faturas",
-                column: "CartaoCreditoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Metas_CategoriaDespesaId",
@@ -446,9 +447,6 @@ namespace MyCash.API.Data.Migrations
                 name: "DespesasConta");
 
             migrationBuilder.DropTable(
-                name: "Faturas");
-
-            migrationBuilder.DropTable(
                 name: "Metas");
 
             migrationBuilder.DropTable(
@@ -458,22 +456,25 @@ namespace MyCash.API.Data.Migrations
                 name: "Receitas");
 
             migrationBuilder.DropTable(
-                name: "SubcategoriasDespesas");
-
-            migrationBuilder.DropTable(
                 name: "CartoesCredito");
 
             migrationBuilder.DropTable(
-                name: "SubcategoriasReceitas");
+                name: "Faturas");
 
             migrationBuilder.DropTable(
-                name: "CategoriasDespesas");
+                name: "SubcategoriasDespesas");
+
+            migrationBuilder.DropTable(
+                name: "SubcategoriasReceitas");
 
             migrationBuilder.DropTable(
                 name: "BandeirasCartoes");
 
             migrationBuilder.DropTable(
                 name: "Contas");
+
+            migrationBuilder.DropTable(
+                name: "CategoriasDespesas");
 
             migrationBuilder.DropTable(
                 name: "CategoriasReceitas");
