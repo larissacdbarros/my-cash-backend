@@ -11,7 +11,7 @@ using src.Models.DTO;
 namespace src.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/despesaCartao")]
     public class DespesasCartaoController : ControllerBase
     {
         private readonly DataContext _context;
@@ -25,7 +25,7 @@ namespace src.Controllers
         public async Task<ActionResult<IEnumerable<DespesaCartao>>> GetAll()
         {
             return await _context.DespesasCartao
-                .Include(despesaCartao => despesaCartao.CartaoCredito)
+                .Include(despesaCartao => despesaCartao.Fatura)
                 .Include(despesaCartao => despesaCartao.SubcategoriaDespesa)
                 .ThenInclude(subcategoriaDespesa => subcategoriaDespesa.CategoriaDespesa)
                 .Include(despesaCartao => despesaCartao.Fatura)
@@ -37,7 +37,7 @@ namespace src.Controllers
         public async Task<ActionResult<DespesaCartao>> GetById(int id)
         {
             var result = await _context.DespesasCartao
-                .Include(despesaCartao => despesaCartao.CartaoCredito)
+                .Include(despesaCartao => despesaCartao.Fatura)
                 .Include(despesaCartao => despesaCartao.SubcategoriaDespesa)
                 .ThenInclude(subcategoriaDespesa => subcategoriaDespesa.CategoriaDespesa)
                 .Include(despesaCartao => despesaCartao.Fatura)
@@ -69,16 +69,12 @@ namespace src.Controllers
             SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(despesaCartao.SubcategoriaDespesaId);
             despesaCartao.SubcategoriaDespesa = subcategoriaDespesa;
 
-            CartaoCredito cartaoCredito = await _context.CartoesCredito.FindAsync(despesaCartao.CartaoCreditoId);
-            despesaCartao.CartaoCredito = cartaoCredito;
 
-            BandeiraCartao bandeiraCartao = await _context.BandeirasCartoes.FindAsync(despesaCartao.CartaoCredito.BandeiraCartaoId);
-            despesaCartao.CartaoCredito.BandeiraCartao = bandeiraCartao;
 
-            Conta conta = await _context.Contas.FindAsync(despesaCartao.CartaoCredito.ContaId);
-            despesaCartao.CartaoCredito.Conta = conta;
+            Conta conta = await _context.Contas.FindAsync(despesaCartao.Fatura.ContaId);
+            despesaCartao.Fatura.Conta = conta;
 
-            despesaCartao.Fatura = VerificarFatura(despesaCartao);
+            despesaCartao.Fatura = VerificarFatura(despesaCartao, body.ContaId);
             
             _context.Entry<DespesaCartao>(result).State = EntityState.Detached;
             _context.Entry<DespesaCartao>(despesaCartao).State = EntityState.Modified;
@@ -87,10 +83,8 @@ namespace src.Controllers
             await _context.SaveChangesAsync();
 
             despesaCartao.SubcategoriaDespesa.CategoriaDespesa=null;
-            despesaCartao.CartaoCredito.DespesasCartao = null;
-            despesaCartao.CartaoCredito.Conta.DespesasConta = null;
-            despesaCartao.CartaoCredito.Conta.CartoesCredito = null;
-
+            despesaCartao.Fatura.DespesasCartao = null;
+            despesaCartao.Fatura.Conta.DespesasConta = null;
 
             return Ok(despesaCartao);
         }
@@ -100,28 +94,24 @@ namespace src.Controllers
         {
             DespesaCartao despesaCartao = new DespesaCartao(body);
 
+            despesaCartao.Fatura = VerificarFatura(despesaCartao, body.ContaId);
+
             SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(despesaCartao.SubcategoriaDespesaId);
             despesaCartao.SubcategoriaDespesa = subcategoriaDespesa;
 
-            CartaoCredito cartaoCredito = await _context.CartoesCredito.FindAsync(despesaCartao.CartaoCreditoId);
-            despesaCartao.CartaoCredito = cartaoCredito;
+            CategoriaDespesa categoriaDespesa = await _context.CategoriasDespesas.FindAsync(despesaCartao.SubcategoriaDespesa.CategoriaDespesaId);
+            despesaCartao.SubcategoriaDespesa.CategoriaDespesa = categoriaDespesa;
 
-            BandeiraCartao bandeiraCartao = await _context.BandeirasCartoes.FindAsync(despesaCartao.CartaoCredito.BandeiraCartaoId);
-            despesaCartao.CartaoCredito.BandeiraCartao = bandeiraCartao;
-
-            Conta conta = await _context.Contas.FindAsync(despesaCartao.CartaoCredito.ContaId);
-            despesaCartao.CartaoCredito.Conta = conta;
-
-            despesaCartao.Fatura = VerificarFatura(despesaCartao);
+            Conta conta = await _context.Contas.FindAsync(despesaCartao.Fatura.ContaId);
+            despesaCartao.Fatura.Conta = conta;
 
             await _context.DespesasCartao.AddAsync(despesaCartao);
             await _context.SaveChangesAsync();
 
-            despesaCartao.SubcategoriaDespesa.CategoriaDespesa=null;
+           // despesaCartao.SubcategoriaDespesa.CategoriaDespesa.SubcategoriasDespesa=null;
 
-            despesaCartao.CartaoCredito.DespesasCartao = null;
-            despesaCartao.CartaoCredito.Conta.DespesasConta = null;
-            despesaCartao.CartaoCredito.Conta.CartoesCredito = null;
+            despesaCartao.Fatura.DespesasCartao = null;
+            despesaCartao.Fatura.Conta.DespesasConta = null;
             
             return Ok(despesaCartao);
         }
@@ -140,12 +130,12 @@ namespace src.Controllers
 
         }
 
-        public Fatura VerificarFatura(DespesaCartao despesaCartao){
+        public Fatura VerificarFatura(DespesaCartao despesaCartao, int contaId){
             int mes = despesaCartao.Data.Month;
             int ano = despesaCartao.Data.Year;
 
             var fatura = _context.Faturas
-                .Where(fatura => fatura.Mes == mes && fatura.Ano == ano)
+                .Where(fatura => fatura.Mes == mes && fatura.Ano == ano && fatura.ContaId == contaId)
                 .FirstOrDefault();
 
             if(fatura != null){
@@ -156,7 +146,10 @@ namespace src.Controllers
                 novaFatura.Ano = ano;
                 novaFatura.Mes = mes;
                 novaFatura.DataFechamentoFatura = new DateTime(ano, mes, 1); //fatura fecha todo dia primeiro
+                novaFatura.ContaId = contaId;
+
                 return novaFatura;
+
             }       
         }
 

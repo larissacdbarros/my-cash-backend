@@ -85,7 +85,7 @@ namespace src.Controllers
             receita.SubcategoriaReceita.CategoriaReceita =null;
             receita.Conta.Usuario =null;
             receita.Conta.DespesasConta = null;
-            receita.Conta.CartoesCredito = null;
+            
 
             return Ok(receita);
         }
@@ -110,7 +110,7 @@ namespace src.Controllers
             receita.SubcategoriaReceita.CategoriaReceita =null;
             receita.Conta.Usuario =null;
             receita.Conta.DespesasConta = null;
-            receita.Conta.CartoesCredito = null;
+            
 
             return Ok(receita);
         }

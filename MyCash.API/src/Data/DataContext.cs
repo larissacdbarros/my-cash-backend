@@ -12,8 +12,6 @@ namespace src.Data
 
         public DbSet<Usuario> Usuarios {get; set;}
         public DbSet<Banco> Bancos  {get; set;}
-        public DbSet<BandeiraCartao> BandeirasCartoes  {get; set;}
-        public DbSet<CartaoCredito> CartoesCredito  {get; set;}
         public DbSet<CategoriaConta> CategoriasContas {get; set;}
         public DbSet<CategoriaDespesa> CategoriasDespesas  {get; set;}
         public DbSet<CategoriaReceita> CategoriasReceitas  {get; set;}
@@ -21,8 +19,6 @@ namespace src.Data
         public DbSet<DespesaConta> DespesasConta  {get; set;}
          public DbSet<DespesaCartao> DespesasCartao  {get; set;}
         public DbSet<Fatura> Faturas  {get; set;}
-        public DbSet<Meta> Metas  {get; set;}
-        public DbSet<Objetivo> Objetivos  {get; set;}
         public DbSet<Receita> Receitas  {get; set;}
         public DbSet<SubcategoriaDespesa> SubcategoriasDespesas  {get; set;}
         public DbSet<SubcategoriaReceita> SubcategoriasReceitas  {get; set;}

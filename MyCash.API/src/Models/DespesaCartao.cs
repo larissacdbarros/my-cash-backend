@@ -8,8 +8,6 @@ namespace src.Models
     {
         
         public int DespesaCartaoId { get; set; }
-        public int CartaoCreditoId { get; set; }
-        public CartaoCredito CartaoCredito { get; set; }
         public string Descricao { get; set; }
         public int SubcategoriaDespesaId { get; set; }
         public SubcategoriaDespesa SubcategoriaDespesa { get; set; }
@@ -18,18 +16,16 @@ namespace src.Models
         public DateTime Data { get; set; }
         public int FaturaId { get; set; }
         public Fatura Fatura { get; set; }
-
+        
         public DespesaCartao(){}
-
         public DespesaCartao(DespesaCartaoReqDTO dto)
         {
-            this.CartaoCreditoId = dto.CartaoCreditoId; 
+             
             this.Descricao = dto.Descricao;
             this.SubcategoriaDespesaId = dto.SubcategoriaDespesaId;
             this.Valor = dto.Valor;
             this.Data = dto.Data;
-            this.FaturaId = dto.FaturaId;   
-
+        
         }
         
 
