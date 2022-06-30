@@ -10,7 +10,7 @@ using src.Data;
 namespace MyCash.API.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220629233645_init")]
+    [Migration("20220630192056_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -55,57 +55,6 @@ namespace MyCash.API.Data.Migrations
                     b.HasKey("BancoId");
 
                     b.ToTable("Bancos");
-                });
-
-            modelBuilder.Entity("src.Models.BandeiraCartao", b =>
-                {
-                    b.Property<int>("BandeiraCartaoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Icone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BandeiraCartaoId");
-
-                    b.ToTable("BandeirasCartoes");
-                });
-
-            modelBuilder.Entity("src.Models.CartaoCredito", b =>
-                {
-                    b.Property<int>("CartaoCreditoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("BandeiraCartaoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ContaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("LimiteCartao")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CartaoCreditoId");
-
-                    b.HasIndex("BandeiraCartaoId");
-
-                    b.HasIndex("ContaId");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("CartoesCredito");
                 });
 
             modelBuilder.Entity("src.Models.CategoriaDespesa", b =>
@@ -175,7 +124,8 @@ namespace MyCash.API.Data.Migrations
 
                     b.HasIndex("CategoriaContaId");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioId")
+                        .IsUnique();
 
                     b.ToTable("Contas");
                 });
@@ -187,11 +137,8 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("CartaoCreditoId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Data")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
@@ -206,8 +153,6 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("DespesaCartaoId");
-
-                    b.HasIndex("CartaoCreditoId");
 
                     b.HasIndex("FaturaId");
 
@@ -227,7 +172,7 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
@@ -254,80 +199,32 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("Ano")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContaId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("DataFechamentoFatura")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
-                    b.Property<DateTime>("DataVencimentoFatura")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Mes")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Mes")
+                        .HasColumnType("int");
 
                     b.Property<double>("ValorFatura")
                         .HasColumnType("float");
 
-                    b.Property<bool>("isFaturaPaga")
+                    b.Property<bool>("isFaturaFechada")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("isFaturaVencida")
+                    b.Property<bool>("isFaturaPaga")
                         .HasColumnType("bit");
 
                     b.HasKey("FaturaId");
 
+                    b.HasIndex("ContaId");
+
                     b.ToTable("Faturas");
-                });
-
-            modelBuilder.Entity("src.Models.Meta", b =>
-                {
-                    b.Property<int>("MetaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CategoriaDespesaId")
-                        .HasColumnType("int");
-
-                    b.Property<double>("LimiteParaGastar")
-                        .HasColumnType("float");
-
-                    b.Property<double>("PercentualGasto")
-                        .HasColumnType("float");
-
-                    b.HasKey("MetaId");
-
-                    b.HasIndex("CategoriaDespesaId");
-
-                    b.ToTable("Metas");
-                });
-
-            modelBuilder.Entity("src.Models.Objetivo", b =>
-                {
-                    b.Property<int>("ObjetivoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DataFinal")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Descricao")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double>("PercentualAcumulado")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ValorAtual")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ValorFinal")
-                        .HasColumnType("float");
-
-                    b.Property<double>("ValorMensal")
-                        .HasColumnType("float");
-
-                    b.HasKey("ObjetivoId");
-
-                    b.ToTable("Objetivos");
                 });
 
             modelBuilder.Entity("src.Models.Receita", b =>
@@ -341,7 +238,7 @@ namespace MyCash.API.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("Date");
 
                     b.Property<string>("Descricao")
                         .HasColumnType("nvarchar(max)");
@@ -431,29 +328,6 @@ namespace MyCash.API.Data.Migrations
                     b.ToTable("Usuarios");
                 });
 
-            modelBuilder.Entity("src.Models.CartaoCredito", b =>
-                {
-                    b.HasOne("src.Models.BandeiraCartao", "BandeiraCartao")
-                        .WithMany()
-                        .HasForeignKey("BandeiraCartaoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("src.Models.Conta", "Conta")
-                        .WithMany("CartoesCredito")
-                        .HasForeignKey("ContaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("src.Models.Usuario", null)
-                        .WithMany("CatoesCredito")
-                        .HasForeignKey("UsuarioId");
-
-                    b.Navigation("BandeiraCartao");
-
-                    b.Navigation("Conta");
-                });
-
             modelBuilder.Entity("src.Models.Conta", b =>
                 {
                     b.HasOne("src.Models.Banco", "Banco")
@@ -469,8 +343,8 @@ namespace MyCash.API.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("src.Models.Usuario", "Usuario")
-                        .WithMany("Contas")
-                        .HasForeignKey("UsuarioId")
+                        .WithOne("Contas")
+                        .HasForeignKey("src.Models.Conta", "UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -483,12 +357,6 @@ namespace MyCash.API.Data.Migrations
 
             modelBuilder.Entity("src.Models.DespesaCartao", b =>
                 {
-                    b.HasOne("src.Models.CartaoCredito", "CartaoCredito")
-                        .WithMany("DespesasCartao")
-                        .HasForeignKey("CartaoCreditoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("src.Models.Fatura", "Fatura")
                         .WithMany("DespesasCartao")
                         .HasForeignKey("FaturaId")
@@ -500,8 +368,6 @@ namespace MyCash.API.Data.Migrations
                         .HasForeignKey("SubcategoriaDespesaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CartaoCredito");
 
                     b.Navigation("Fatura");
 
@@ -527,15 +393,15 @@ namespace MyCash.API.Data.Migrations
                     b.Navigation("SubcategoriaDespesa");
                 });
 
-            modelBuilder.Entity("src.Models.Meta", b =>
+            modelBuilder.Entity("src.Models.Fatura", b =>
                 {
-                    b.HasOne("src.Models.CategoriaDespesa", "CategoriaDespesa")
-                        .WithMany()
-                        .HasForeignKey("CategoriaDespesaId")
+                    b.HasOne("src.Models.Conta", "Conta")
+                        .WithMany("Faturas")
+                        .HasForeignKey("ContaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CategoriaDespesa");
+                    b.Navigation("Conta");
                 });
 
             modelBuilder.Entity("src.Models.Receita", b =>
@@ -579,11 +445,6 @@ namespace MyCash.API.Data.Migrations
                     b.Navigation("CategoriaReceita");
                 });
 
-            modelBuilder.Entity("src.Models.CartaoCredito", b =>
-                {
-                    b.Navigation("DespesasCartao");
-                });
-
             modelBuilder.Entity("src.Models.CategoriaDespesa", b =>
                 {
                     b.Navigation("SubcategoriasDespesa");
@@ -596,9 +457,9 @@ namespace MyCash.API.Data.Migrations
 
             modelBuilder.Entity("src.Models.Conta", b =>
                 {
-                    b.Navigation("CartoesCredito");
-
                     b.Navigation("DespesasConta");
+
+                    b.Navigation("Faturas");
                 });
 
             modelBuilder.Entity("src.Models.Fatura", b =>
@@ -608,8 +469,6 @@ namespace MyCash.API.Data.Migrations
 
             modelBuilder.Entity("src.Models.Usuario", b =>
                 {
-                    b.Navigation("CatoesCredito");
-
                     b.Navigation("Contas");
                 });
 #pragma warning restore 612, 618

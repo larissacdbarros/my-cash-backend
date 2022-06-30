@@ -16,7 +16,8 @@ namespace src.Models
         public Usuario Usuario { get; set; }   
         public double Valor { get; set; }
         public IEnumerable<DespesaConta> DespesasConta { get; set; } 
-        public IEnumerable<CartaoCredito> CartoesCredito { get; set; }
+        public IEnumerable<Fatura> Faturas { get; set; } 
+
 
     }
 }

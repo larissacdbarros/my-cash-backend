@@ -12,6 +12,7 @@ namespace src.Models.DTO
         public double ValorFatura { get; set; } 
         public bool isFaturaFechada { get; set; }
         public bool isFaturaPaga { get; set; }
+        public int ContaId { get; set; }
         
     }
 }

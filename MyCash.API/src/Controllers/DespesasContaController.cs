@@ -91,7 +91,7 @@ namespace src.Controllers
             despesaConta.SubcategoriaDespesa.CategoriaDespesa =null;
             despesaConta.Conta.Usuario =null;
             despesaConta.Conta.DespesasConta = null;
-            despesaConta.Conta.CartoesCredito = null;
+            
 
             return Ok(despesaConta);
         }
@@ -116,7 +116,7 @@ namespace src.Controllers
             despesaConta.SubcategoriaDespesa.CategoriaDespesa =null;
             despesaConta.Conta.Usuario =null;
             despesaConta.Conta.DespesasConta = null;
-            despesaConta.Conta.CartoesCredito = null;
+      
 
             return Ok(despesaConta);
         }
