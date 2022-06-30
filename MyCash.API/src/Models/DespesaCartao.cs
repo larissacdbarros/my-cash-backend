@@ -14,6 +14,7 @@ namespace src.Models
         public int SubcategoriaDespesaId { get; set; }
         public SubcategoriaDespesa SubcategoriaDespesa { get; set; }
         public double Valor { get; set; }
+        [Column(TypeName="Date")]
         public DateTime Data { get; set; }
         public int FaturaId { get; set; }
         public Fatura Fatura { get; set; }
