@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MyCash.API.Models;
 using src.Data;
 using src.Models;
+using src.Models.DTO;
 
 namespace src.Controllers
 {
@@ -23,98 +25,96 @@ namespace src.Controllers
         {
             List<DespesaConta> despesasConta = await _context.DespesasConta.ToListAsync();
 
-            foreach(DespesaConta despesa in despesasConta){
-                SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(despesa.SubcategoriaDespesaId);
-                Conta conta = await _context.Contas.FindAsync(despesa.ContaId);
-                Banco banco = await _context.Bancos.FindAsync(despesa.Conta.BancoId);
-                CategoriaConta categoriaConta = await _context.CategoriasContas.FindAsync(despesa.Conta.CategoriaContaId);
-                Usuario usuario = await _context.Usuarios.FindAsync(despesa.Conta.UsuarioId);
+             
+            return await _context.DespesasConta
+                .Include(despesasConta => despesasConta.SubcategoriaDespesa)
+                .ThenInclude(subcategoriaDepesa => subcategoriaDepesa.CategoriaDespesa)
+                .Include(SubcategoriaDespesa => SubcategoriaDespesa.Conta).ThenInclude(conta => conta.Banco)
+                .Include(SubcategoriaDespesa => SubcategoriaDespesa.Conta).ThenInclude(conta => conta.Usuario)
+                .ToListAsync();
                 
-                despesa.SubcategoriaDespesa.CategoriaDespesa = null;
-                despesa.Conta.Usuario =null;
-                despesa.Conta.DespesasConta = null;
-                despesa.Conta.CartoesCredito = null;
-            }
-
-            return await _context.DespesasConta.ToListAsync();
+               
+           
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<DespesaConta>> GetById(int id)
         {
-            DespesaConta result = await _context.DespesasConta.FindAsync(id);
+
+            var result = await _context.DespesasConta
+            .Include(DespesaConta => DespesaConta.SubcategoriaDespesa)
+            .ThenInclude(SubcategoriaDespesa => SubcategoriaDespesa.CategoriaDespesa)
+            .Include(DespesaConta => DespesaConta.Conta).ThenInclude(conta => conta.Banco)
+            .Include(DespesaConta => DespesaConta.Conta).ThenInclude(conta => conta.Usuario)
+            .Where(DespesaConta => DespesaConta.DespesaContaId == id)
+            .FirstOrDefaultAsync();
 
             if (result == null)
             {
                 return NotFound();
             }
-            
-            SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(result.SubcategoriaDespesaId);
-            Conta conta = await _context.Contas.FindAsync(result.ContaId);
-
-            result.SubcategoriaDespesa.CategoriaDespesa = null;
-            result.Conta.Usuario =null;
-            result.Conta.DespesasConta = null;
-            result.Conta.CartoesCredito = null;
-            
             return result;
+            
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, DespesaConta body)
+        public async Task<IActionResult> Update(int id, DespesaContaReqDTO body)
         {
             DespesaConta result = await _context.DespesasConta.FindAsync(id);
             if(result == null){
                 return NotFound();
             }
+            DespesaConta despesaConta = new DespesaConta(body);
 
-            body.DespesaContaId = id ;
+            despesaConta.DespesaContaId = id ;
 
             SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(body.SubcategoriaDespesaId);
-            body.SubcategoriaDespesa = subcategoriaDespesa;
+            despesaConta.SubcategoriaDespesa = subcategoriaDespesa;
 
-            Conta conta = await _context.Contas.FindAsync(body.ContaId);
-            body.Conta = conta;
+            Conta conta = await _context.Contas.FindAsync(despesaConta.ContaId);
+            despesaConta.Conta = conta;
 
-            Banco banco = await _context.Bancos.FindAsync(body.Conta.BancoId);
-            body.Conta.Banco = banco;
+            Banco banco = await _context.Bancos.FindAsync(despesaConta.Conta.BancoId);
+            despesaConta.Conta.Banco = banco;
            
            
             _context.Entry<DespesaConta>(result).State = EntityState.Detached;
-            _context.Entry<DespesaConta>(body).State = EntityState.Modified;
+            _context.Entry<DespesaConta>(despesaConta).State = EntityState.Modified;
             
-            _context.DespesasConta.Update(body);
+            _context.DespesasConta.Update(despesaConta);
             await _context.SaveChangesAsync();
 
-            body.SubcategoriaDespesa.CategoriaDespesa =null;
-            body.Conta.Usuario =null;
-            body.Conta.DespesasConta = null;
-            body.Conta.CartoesCredito = null;
+            despesaConta.SubcategoriaDespesa.CategoriaDespesa =null;
+            despesaConta.Conta.Usuario =null;
+            despesaConta.Conta.DespesasConta = null;
+            despesaConta.Conta.CartoesCredito = null;
 
-            return Ok(body);
+            return Ok(despesaConta);
         }
 
         [HttpPost]
-        public async Task<ActionResult<DespesaConta>> Create(DespesaConta body)
+        public async Task<ActionResult<DespesaConta>> Create(DespesaContaReqDTO body)
         {
-            SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(body.SubcategoriaDespesaId);
-            body.SubcategoriaDespesa = subcategoriaDespesa;
+            DespesaConta despesaConta = new DespesaConta(body);
 
-            Conta conta = await _context.Contas.FindAsync(body.ContaId);
-            body.Conta = conta;
+            SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(despesaConta.SubcategoriaDespesaId);
+             despesaConta.SubcategoriaDespesa = subcategoriaDespesa;
 
-            Banco banco = await _context.Bancos.FindAsync(body.Conta.BancoId);
-            body.Conta.Banco = banco;
+            Conta conta = await _context.Contas.FindAsync(despesaConta.ContaId);
+            despesaConta.Conta = conta;
 
-            await _context.DespesasConta.AddAsync(body);
+            Banco banco = await _context.Bancos.FindAsync(despesaConta.Conta.BancoId);
+            despesaConta.Conta.Banco = banco;
+
+            await _context.DespesasConta.AddAsync(despesaConta);
             await _context.SaveChangesAsync();
 
-            body.SubcategoriaDespesa.CategoriaDespesa =null;
-            body.Conta.Usuario =null;
-            body.Conta.DespesasConta = null;
-            body.Conta.CartoesCredito = null;
+            despesaConta.SubcategoriaDespesa.CategoriaDespesa =null;
+            despesaConta.Conta.Usuario =null;
+            despesaConta.Conta.DespesasConta = null;
+            despesaConta.Conta.CartoesCredito = null;
 
-            return Ok(body);
+            return Ok(despesaConta);
         }
 
         [HttpDelete("{id}")]
