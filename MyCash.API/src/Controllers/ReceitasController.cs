@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyCash.API.Models;
 using src.Data;
 using src.Models;
 using src.Models.DTO;
@@ -26,8 +25,10 @@ namespace src.Controllers
             return await _context.Receitas
                 .Include(receita => receita.SubcategoriaReceita)
                 .ThenInclude(subcategoriaReceita => subcategoriaReceita.CategoriaReceita)
-                .Include(receita => receita.Conta).ThenInclude(conta => conta.Banco)
-                .Include(receita => receita.Conta).ThenInclude(conta => conta.Usuario)
+                .Include(receita => receita.Conta)
+                .ThenInclude(conta => conta.Banco)
+                .Include(receita => receita.Conta)
+                .ThenInclude(conta => conta.Usuario)
                 .ToListAsync();
 
         }

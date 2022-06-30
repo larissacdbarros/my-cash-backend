@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using src.Data;
 using src.Models;
+using src.Models.DTO;
 
 namespace src.Controllers
 {
@@ -26,7 +28,9 @@ namespace src.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Fatura>> GetById(int id)
         {
-            Fatura result = await _context.Faturas.FindAsync(id);
+            Fatura result = await _context.Faturas
+            .Where(fatura => fatura.FaturaId == id)
+            .FirstOrDefaultAsync();
 
             if (result == null)
             {
@@ -36,28 +40,33 @@ namespace src.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, Fatura body)
+        public async Task<IActionResult> Update(int id, FaturaReqDTO body)
         {
             Fatura result = await _context.Faturas.FindAsync(id);
+            
             if(result == null){
                 return NotFound();
             }
 
-            body.FaturaId = id ;
+            Fatura fatura = new Fatura(body);
+            fatura.FaturaId = id;
 
             _context.Entry<Fatura>(result).State = EntityState.Detached;
-            _context.Entry<Fatura>(body).State = EntityState.Modified;
+            _context.Entry<Fatura>(fatura).State = EntityState.Modified;
             
-            _context.Faturas.Update(body);
+            _context.Faturas.Update(fatura);
             await _context.SaveChangesAsync();
 
-            return Ok(body);
+            return Ok(fatura);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Fatura>> Create(Fatura body)
+        public async Task<ActionResult<Fatura>> Create(FaturaReqDTO body)
         {
-            await _context.Faturas.AddAsync(body);
+            Fatura fatura = new Fatura(body);
+             
+            
+            await _context.Faturas.AddAsync(fatura);
             await _context.SaveChangesAsync();
 
             return Ok(body);
