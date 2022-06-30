@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,18 +69,27 @@ namespace src.Controllers
             SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(despesaCartao.SubcategoriaDespesaId);
             despesaCartao.SubcategoriaDespesa = subcategoriaDespesa;
 
-            Fatura fatura = await _context.Faturas.FindAsync(despesaCartao.FaturaId);
-            despesaCartao.Fatura = fatura;
-
             CartaoCredito cartaoCredito = await _context.CartoesCredito.FindAsync(despesaCartao.CartaoCreditoId);
             despesaCartao.CartaoCredito = cartaoCredito;
 
+            BandeiraCartao bandeiraCartao = await _context.BandeirasCartoes.FindAsync(despesaCartao.CartaoCredito.BandeiraCartaoId);
+            despesaCartao.CartaoCredito.BandeiraCartao = bandeiraCartao;
 
+            Conta conta = await _context.Contas.FindAsync(despesaCartao.CartaoCredito.ContaId);
+            despesaCartao.CartaoCredito.Conta = conta;
+
+            despesaCartao.Fatura = VerificarFatura(despesaCartao);
+            
             _context.Entry<DespesaCartao>(result).State = EntityState.Detached;
             _context.Entry<DespesaCartao>(despesaCartao).State = EntityState.Modified;
             
             _context.DespesasCartao.Update(despesaCartao);
             await _context.SaveChangesAsync();
+
+            despesaCartao.SubcategoriaDespesa.CategoriaDespesa=null;
+            despesaCartao.CartaoCredito.DespesasCartao = null;
+            despesaCartao.CartaoCredito.Conta.DespesasConta = null;
+            despesaCartao.CartaoCredito.Conta.CartoesCredito = null;
 
 
             return Ok(despesaCartao);
@@ -93,9 +103,6 @@ namespace src.Controllers
             SubcategoriaDespesa subcategoriaDespesa = await _context.SubcategoriasDespesas.FindAsync(despesaCartao.SubcategoriaDespesaId);
             despesaCartao.SubcategoriaDespesa = subcategoriaDespesa;
 
-            Fatura fatura = await _context.Faturas.FindAsync(despesaCartao.FaturaId);
-            despesaCartao.Fatura = fatura;
-
             CartaoCredito cartaoCredito = await _context.CartoesCredito.FindAsync(despesaCartao.CartaoCreditoId);
             despesaCartao.CartaoCredito = cartaoCredito;
 
@@ -105,12 +112,13 @@ namespace src.Controllers
             Conta conta = await _context.Contas.FindAsync(despesaCartao.CartaoCredito.ContaId);
             despesaCartao.CartaoCredito.Conta = conta;
 
+            despesaCartao.Fatura = VerificarFatura(despesaCartao);
 
             await _context.DespesasCartao.AddAsync(despesaCartao);
             await _context.SaveChangesAsync();
 
             despesaCartao.SubcategoriaDespesa.CategoriaDespesa=null;
-            despesaCartao.Fatura.DespesasCartao = null;
+
             despesaCartao.CartaoCredito.DespesasCartao = null;
             despesaCartao.CartaoCredito.Conta.DespesasConta = null;
             despesaCartao.CartaoCredito.Conta.CartoesCredito = null;
@@ -130,6 +138,26 @@ namespace src.Controllers
 
             return Ok();
 
+        }
+
+        public Fatura VerificarFatura(DespesaCartao despesaCartao){
+            int mes = despesaCartao.Data.Month;
+            int ano = despesaCartao.Data.Year;
+
+            var fatura = _context.Faturas
+                .Where(fatura => fatura.Mes == mes && fatura.Ano == ano)
+                .FirstOrDefault();
+
+            if(fatura != null){
+                return fatura;                      
+
+            }else{
+                Fatura novaFatura = new Fatura();
+                novaFatura.Ano = ano;
+                novaFatura.Mes = mes;
+                novaFatura.DataFechamentoFatura = new DateTime(ano, mes, 1); //fatura fecha todo dia primeiro
+                return novaFatura;
+            }       
         }
 
     }
