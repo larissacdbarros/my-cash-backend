@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using src.Models.DTO;
 
 namespace src.Models
@@ -8,11 +9,12 @@ namespace src.Models
     {
         
         public int FaturaId { get; set; }
+        [Column(TypeName="Date")]
         public DateTime DataFechamentoFatura { get; set; }
-        public DateTime DataVencimentoFatura { get; set; }
-        public string Mes { get; set; }
+        public int Mes { get; set; }
+        public int Ano { get; set; }
         public double ValorFatura { get; set; }
-        public bool isFaturaVencida { get; set; }
+        public bool isFaturaFechada { get; set; } 
         public bool isFaturaPaga { get; set; }
         public IEnumerable<DespesaCartao> DespesasCartao { get; set; }
 
@@ -20,10 +22,10 @@ namespace src.Models
         {
             
             this.DataFechamentoFatura = dto.DataFechamentoFatura;
-            this.DataVencimentoFatura = dto.DataVencimentoFatura;
             this.Mes = dto.Mes;
+            this.Ano = dto.Ano;
             this.ValorFatura = dto.ValorFatura;
-            this.isFaturaVencida = dto.isFaturaVencida;
+            this.isFaturaFechada = dto.isFaturaFechada;
             this.isFaturaPaga = dto.isFaturaPaga;
 
         }
