@@ -130,9 +130,19 @@ namespace src.Controllers
 
         }
 
-        public Fatura VerificarFatura(DespesaCartao despesaCartao, int contaId){
+        private Fatura VerificarFatura(DespesaCartao despesaCartao, int contaId){
             int mes = despesaCartao.Data.Month;
             int ano = despesaCartao.Data.Year;
+
+            int mesFechamento = despesaCartao.Data.Month;
+            int anoFechamento = despesaCartao.Data.Year;
+                
+             if(mesFechamento == 12){
+                anoFechamento += 1;
+                mesFechamento =1;
+            }else{
+                mesFechamento += 1;
+            }
 
             var fatura = _context.Faturas
                 .Where(fatura => fatura.Mes == mes && fatura.Ano == ano && fatura.ContaId == contaId)
@@ -145,7 +155,7 @@ namespace src.Controllers
                 Fatura novaFatura = new Fatura();
                 novaFatura.Ano = ano;
                 novaFatura.Mes = mes;
-                novaFatura.DataFechamentoFatura = new DateTime(ano, mes, 1); //fatura fecha todo dia primeiro
+                novaFatura.DataFechamentoFatura = new DateTime(anoFechamento, mesFechamento, 1); //fatura fecha todo dia primeiro
                 novaFatura.ContaId = contaId;
 
                 return novaFatura;

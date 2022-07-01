@@ -50,7 +50,7 @@ namespace src.Controllers
             DateTime dataAtual = DateTime.Now;
             int mes = dataAtual.Month;
             int ano = dataAtual.Year;
-            
+         
 
             var totalFaturaCartao =  from despesaCartao in _context.DespesasCartao
             join fatura in _context.Faturas on despesaCartao.FaturaId equals fatura.FaturaId
