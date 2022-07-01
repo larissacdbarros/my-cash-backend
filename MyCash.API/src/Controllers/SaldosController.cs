@@ -54,7 +54,7 @@ namespace src.Controllers
 
             var totalFaturaCartao =  from despesaCartao in _context.DespesasCartao
             join fatura in _context.Faturas on despesaCartao.FaturaId equals fatura.FaturaId
-            where fatura.Mes == mes && fatura.Ano == ano 
+            where fatura.Mes == mes && fatura.Ano == ano && fatura.ContaId == contaId
             group despesaCartao by fatura.FaturaId into g
             select new {
                 

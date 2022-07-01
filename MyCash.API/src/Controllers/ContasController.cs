@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,38 +20,12 @@ namespace src.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Conta>>> GetAll()
+        [HttpGet("{usuarioId}")]
+        public async Task<ActionResult<IEnumerable<Conta>>> GetByUsuarioId(int usuarioId)
         {
-            List<Conta> contas = await _context.Contas.ToListAsync();
-            foreach(Conta conta in contas){
-                Banco banco = await _context.Bancos.FindAsync(conta.BancoId);
-                CategoriaConta categoriaConta = await _context.CategoriasContas.FindAsync(conta.CategoriaContaId);
-                Usuario usuario = await _context.Usuarios.FindAsync(conta.UsuarioId);
-                conta.Usuario.Contas = null;
-            }
-
-            
-            return await _context.Contas.ToListAsync();
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Conta>> GetById(int id)
-        {
-            Conta result = await _context.Contas.FindAsync(id);
-
-            Banco banco = await _context.Bancos.FindAsync(result.BancoId);
-            CategoriaConta categoriaConta = await _context.CategoriasContas.FindAsync(result.CategoriaContaId);
-            Usuario usuario = await _context.Usuarios.FindAsync(result.UsuarioId);
-
-            if (result == null)
-            {
-                return NotFound();
-            }
-
-            result.Usuario.Contas = null; //evitar o loop no retorno
-
-            return result;
+            return await _context.Contas
+            .Where(conta => conta.UsuarioId == usuarioId)
+            .ToListAsync();
         }
 
         [HttpPut("{id}")]
@@ -79,7 +54,7 @@ namespace src.Controllers
             _context.Contas.Update(body);
             await _context.SaveChangesAsync();
 
-            body.Usuario.Contas = null;
+            body.Usuario.Conta = null;
 
             return Ok(body);
         }
@@ -99,7 +74,7 @@ namespace src.Controllers
             await _context.Contas.AddAsync(body);
             await _context.SaveChangesAsync();
 
-            body.Usuario.Contas = null; //as outras contas do usuario são colocadas como null
+            body.Usuario.Conta = null; //as outras contas do usuario são colocadas como null
             // apenas na hora de retornar o body para não gerar loop já que dentro o Usuario também tem contas 
             
             return Ok(body);

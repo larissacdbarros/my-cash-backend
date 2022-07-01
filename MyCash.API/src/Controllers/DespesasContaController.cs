@@ -20,12 +20,9 @@ namespace src.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DespesaConta>>> GetAll()
-        {
-            List<DespesaConta> despesasConta = await _context.DespesasConta.ToListAsync();
-
-             
+        [HttpGet("conta/{contaId}")]
+        public async Task<ActionResult<IEnumerable<DespesaConta>>> GetByContaId(int contaId)
+        {             
             return await _context.DespesasConta
                 .Include(despesaConta => despesaConta.SubcategoriaDespesa)
                 .ThenInclude(subcategoriaDespesa => subcategoriaDespesa.CategoriaDespesa)
@@ -33,6 +30,7 @@ namespace src.Controllers
                 .ThenInclude(conta => conta.Banco)
                 .Include(despesaConta => despesaConta.Conta)
                 .ThenInclude(conta => conta.Usuario)
+                .Where(despesaConta => despesaConta.ContaId == contaId)
                 .ToListAsync();
                 
                

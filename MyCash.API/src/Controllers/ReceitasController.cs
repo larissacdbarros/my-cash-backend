@@ -19,8 +19,8 @@ namespace src.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Receita>>> GetAll()
+        [HttpGet("conta/{contaId}")]
+        public async Task<ActionResult<IEnumerable<Receita>>> GetByConta(int contaId)
         {
             return await _context.Receitas
                 .Include(receita => receita.SubcategoriaReceita)
@@ -29,6 +29,7 @@ namespace src.Controllers
                 .ThenInclude(conta => conta.Banco)
                 .Include(receita => receita.Conta)
                 .ThenInclude(conta => conta.Usuario)
+                .Where (receita => receita.ContaId == contaId)
                 .ToListAsync();
 
         }

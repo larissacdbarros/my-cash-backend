@@ -21,14 +21,15 @@ namespace src.Controllers
             _context = context;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<DespesaCartao>>> GetAll()
+        [HttpGet("conta/{contaId}")]
+        public async Task<ActionResult<IEnumerable<DespesaCartao>>> getByConta(int contaId)
         {
             return await _context.DespesasCartao
                 .Include(despesaCartao => despesaCartao.Fatura)
+                .ThenInclude(fatura => fatura.Conta) 
                 .Include(despesaCartao => despesaCartao.SubcategoriaDespesa)
                 .ThenInclude(subcategoriaDespesa => subcategoriaDespesa.CategoriaDespesa)
-                .Include(despesaCartao => despesaCartao.Fatura)
+                .Where(despesaCartao => despesaCartao.Fatura.ContaId == contaId)
                 .ToListAsync();
 
         }
@@ -41,7 +42,7 @@ namespace src.Controllers
                 .Include(despesaCartao => despesaCartao.SubcategoriaDespesa)
                 .ThenInclude(subcategoriaDespesa => subcategoriaDespesa.CategoriaDespesa)
                 .Include(despesaCartao => despesaCartao.Fatura)
-                .Where(DespesaCartao => DespesaCartao.DespesaCartaoId == id)
+                .Where(despesaCartao => despesaCartao.DespesaCartaoId == id)
                 .FirstOrDefaultAsync();
             
 
