@@ -45,6 +45,7 @@ namespace MyCash.API.Controllers
             }
 
             body.UsuarioId = id ;
+            
 
             _context.Entry<Usuario>(result).State = EntityState.Detached;
             _context.Entry<Usuario>(body).State = EntityState.Modified;

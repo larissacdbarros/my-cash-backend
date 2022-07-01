@@ -9,7 +9,7 @@ namespace src.Models
         
         public int DespesaCartaoId { get; set; }
         public string Descricao { get; set; }
-        public int SubcategoriaDespesaId { get; set; }
+        public int? SubcategoriaDespesaId { get; set; }
         public SubcategoriaDespesa SubcategoriaDespesa { get; set; }
         public double Valor { get; set; }
         [Column(TypeName="Date")]
