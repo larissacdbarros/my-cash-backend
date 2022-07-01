@@ -9,7 +9,7 @@ namespace src.Models
         public string Sobrenome { get; set; }   
         public string Email { get; set; }
         public string Senha { get; set; }   
-        public Conta Contas { get; set; } 
+        public Conta Conta { get; set; } 
 
     }
 }

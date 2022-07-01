@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using MyCash.API.Models;
 using src.Data;
 using src.Models;
 
@@ -62,6 +64,23 @@ namespace MyCash.API.Controllers
             await _context.Usuarios.AddAsync(body);
             await _context.SaveChangesAsync();
 
+            Banco banco = new Banco ();
+            banco.Nome = "Meu Banco";
+            banco.Imagem = "";
+
+            await _context.Bancos.AddAsync(banco);
+            await _context.SaveChangesAsync();
+
+            Conta conta = new Conta ();
+            conta.BancoId = banco.BancoId;
+            conta.CategoriaContaId = VerificarCategoriaConta();
+            conta.Descricao = "Minha Conta";
+            conta.SaldoAtual = 0.0;
+            conta.UsuarioId = body.UsuarioId;
+            
+            await _context.Contas.AddAsync(conta);
+            await _context.SaveChangesAsync();
+
             return Ok(body);
         }
 
@@ -78,5 +97,43 @@ namespace MyCash.API.Controllers
             return Ok();
 
         }
+
+        [HttpGet("email/{email}/senha/{senha}")]
+        public async Task<ActionResult<Usuario>> AutenticarUsuario(string email, string senha){
+            var usuario = await _context.Usuarios
+            .Include(usuario => usuario.Conta)
+            .Where(usuario => usuario.Email == email &&
+            usuario.Senha == senha ).FirstOrDefaultAsync();
+
+            if(usuario == null){
+                return NotFound();
+            }
+
+            return usuario;
+
+        }
+
+        private int VerificarCategoriaConta(){
+
+            var categoria = _context.CategoriasContas
+                        .Where (conta => conta.Tipo == "Conta Corrente" )
+                        .FirstOrDefault();
+
+            if(categoria != null){
+                return categoria.CategoriaContaId;
+
+            }else{
+                CategoriaConta categoriaConta = new CategoriaConta();
+                categoriaConta.Tipo = "Conta Corrente";
+                categoriaConta.Icone = "";
+
+                _context.CategoriasContas.Add(categoriaConta);
+                _context.SaveChanges();
+
+                return categoriaConta.CategoriaContaId;
+
+        }
+
+         
     }
-}
+}}
